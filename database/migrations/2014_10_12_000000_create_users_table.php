@@ -13,14 +13,32 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
+            $table->primary('id');
+            $table->integer('id')->unsigned();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->string('loginid',50)->unique();
+            $table->char('password');
+            $table->integer('locked');
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
+        
+        /**
+         * Account Demo
+         */
+        DB::table('users')->insert(
+                array(
+                    'id' => 1,
+                    'name' => 'Administrator',
+                    'loginid' => 'songviytuong',
+                    'password' => Hash::make('cadillac'),
+                    'locked' => 0
+                )
+        );
     }
 
     /**
