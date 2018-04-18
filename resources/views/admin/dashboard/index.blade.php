@@ -6,17 +6,17 @@
   <title>Zenrin-Data Dashboard</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" href="{{ URL::to('/admin/') }}/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ URL::to('/assets/admin/') }}/bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ URL::to('/admin/') }}/bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ URL::to('/assets/admin/') }}/bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="{{ URL::to('/admin/') }}/bower_components/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="{{ URL::to('/assets/admin/') }}/bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ URL::to('/admin/') }}/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="{{ URL::to('/assets/admin/') }}/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
-  <link rel="stylesheet" href="{{ URL::to('/admin/') }}/dist/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" href="{{ URL::to('/assets/admin/') }}/dist/css/skins/skin-blue.min.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -55,7 +55,7 @@ desired effect
   <!-- Main Header -->
   <header class="main-header">
     <!-- Logo -->
-    <a href="{{url::to('/admin/dashboard')}}" class="logo">
+    <a href="{{url::to('/admin')}}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>A</b>LT</span>
       <!-- logo for regular state and mobile devices -->
@@ -76,7 +76,7 @@ desired effect
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="{{ URL::to('/admin/') }}/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="{{ URL::to('/assets/admin/') }}/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs">{{Auth::user()->name}}</span>
             </a>
@@ -113,7 +113,7 @@ desired effect
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{{ URL::to('/admin/') }}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="{{ URL::to('/assets/admin/') }}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{Auth::user()->name}}</p>
@@ -142,12 +142,12 @@ desired effect
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard
+        Home
         <small>Optional description</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{url::to('/admin/dashboard')}}"><i class="fa fa-dashboard"></i> Zenrin-Data</a></li>
-        <li class="active">dashboard</li>
+        <li><a href="{{url::to('/assets/admin')}}"><i class="fa fa-dashboard"></i> Zenrin-Data</a></li>
+        <li class="active">Home</li>
       </ol>
     </section>
 
@@ -255,11 +255,11 @@ desired effect
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 3 -->
-<script src="{{ URL::to('/admin/') }}/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="{{ URL::to('/assets/admin/') }}/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
-<script src="{{ URL::to('/admin/') }}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="{{ URL::to('/assets/admin/') }}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
-<script src="{{ URL::to('/admin/') }}/dist/js/adminlte.min.js"></script>
+<script src="{{ URL::to('/assets/admin/') }}/dist/js/adminlte.min.js"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
