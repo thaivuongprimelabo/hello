@@ -1,3 +1,6 @@
+html {
+    height: auto;
+}
 .login-box,.register-box{
     width:400px !important;
 }
