@@ -21,7 +21,7 @@ class LoginController extends Controller {
         if (Auth::guest()) {
             return Redirect::to('/auth/login');
         } else {
-            return Redirect::to('/admin/dashboard');
+            return Redirect::to('/admin');
         }
     }
 
@@ -49,7 +49,7 @@ class LoginController extends Controller {
             );
 
             if (Auth::attempt($userdata)) {
-                return Redirect::to('/admin/');
+                return Redirect::to('/admin');
             } else {
                 return Redirect::to('/auth/login');
             }
