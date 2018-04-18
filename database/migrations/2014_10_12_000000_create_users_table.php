@@ -39,6 +39,16 @@ class CreateUsersTable extends Migration
                     'locked' => 0
                 )
         );
+        
+        DB::table('users')->insert(
+                array(
+                    'id' => 2,
+                    'name' => 'Zenrin Administrator',
+                    'loginid' => 'zenrin',
+                    'password' => Hash::make('zenrin@123'),
+                    'locked' => 0
+                )
+        );
     }
 
     /**
