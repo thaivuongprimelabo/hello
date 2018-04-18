@@ -1,0 +1,23 @@
+.w70 { 
+    width: 70%;
+}
+.mr10 {
+    margin-right: 10px;
+}
+.box-w80 { 
+    width: 80%;
+}
+.box-row {
+    margin-bottom: 15px;
+}
+.box_inline {
+    display: inline-block;
+}
+@media (max-width: 768px) {
+  .box-w80 { 
+        width: 100%!important;
+    }
+    .w70 {
+        width: 100%;
+    }
+}
