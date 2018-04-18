@@ -12,9 +12,9 @@ use App\Helpers\HttpGatewayHandler;
 class ApiController extends Controller {
 
     public function index() {
-        echo "API Controller Index!";
-        $sid = 'AC7ab74e95bb637afb9ecae4259259ca58';
-        $token = 'd12233f4c5d39bf23a264e8c8edd462a';
+        
+        $sid = HttpGatewayHandler::getApiKey();
+        $token = HttpGatewayHandler::getApiSecretKey();
         $client = new Twilio($sid, $token);
         $number = $client->incomingPhoneNumbers->create(
                 array(
@@ -22,8 +22,6 @@ class ApiController extends Controller {
                     "phoneNumber" => "+15005550006"
                 )
         );
-        echo "<pre>";
-        var_dump($number);
         echo "Done";
     }
 

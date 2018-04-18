@@ -103,16 +103,30 @@ class HttpGatewayHandler {
         print_r($result);
     }
 
-    public function getMsg($key = null) {
+    public function getMsg($key = null, $lang = 'ja') {
         $res = array(
-            'failed_authentication' => 'Failed Authentication',
-            'call_is_already_finished' => 'Call is Already Finished',
-            'call_is_in_progress' => 'Call is In-Progress',
-            'invalid_request_parameter' => 'Invalid Request Parameter',
-            'call_not_found' => 'Call not Found',
+            'en' => array(
+                'failed_authentication' => 'Failed Authentication',
+                'invalid_key' => 'Invalid Key',
+                'no_source_phone_number' => 'No source phone Number',
+                'invalid_request_parameter' => 'Invalid Request Parameter',
+                'call_is_already_finished' => 'Call is Already Finished',
+                'call_not_found' => 'Call not Found',
+                'call_is_in_progress' => 'Call is In-Progress',
+            ),
+            'ja' => array(
+                'failed_authentication' => 'ログインIDまたはパスワードが違います。',
+                'invalid_key' => '有効な認証情報キーではありません。',
+                'no_source_phone_number' => '発信元番号が誤っています。',
+                'invalid_request_parameter' => '値がただしくありません。',
+                'call_is_already_finished' => '対象の音声通知はすでに終了しています。',
+                'call_not_found' => '指定の音声通知は存在しません。',
+                'call_is_in_progress' => '対象の音声通知は通話中のためキャンセルできません。',
+            )
+            
         );
         if ($key) {
-            return $res[$key];
+            return $res[$lang][$key];
         } else {
             return $res;
         }
