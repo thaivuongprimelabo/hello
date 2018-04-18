@@ -21,6 +21,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
   <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+  <!-- Fix Style -->
+  <link rel="stylesheet" href="dist/css/style.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -54,7 +56,7 @@ desired effect
 |---------------------------------------------------------|
 -->
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
+<div class="wrapper wrap-cont">
 
   <!-- Main Header -->
   <header class="main-header">
@@ -88,12 +90,7 @@ desired effect
             <ul class="dropdown-menu">
               <!-- Menu Footer-->
               <li class="user-footer">
-                <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-                </div>
-                <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                </div>
+                <a href="#" class="btn btn-default btn-flat">Sign out</a>
               </li>
             </ul>
           </li>
@@ -162,10 +159,6 @@ desired effect
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
-    </div>
     <!-- Default to the left -->
     <strong>Copyright &copy; 2018 <a href="#!">Zenrin</a>.</strong> All rights reserved.
   </footer>

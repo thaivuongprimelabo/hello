@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- Fix Style -->
+  <link rel="stylesheet" href="dist/css/style.css">
   <!-- iCheck -->
   <link rel="stylesheet" href="plugins/iCheck/square/blue.css">
 
@@ -28,13 +30,14 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition login-page">
-<div class="login-box">
+<div class="login-box login-frm">
   <div class="login-logo">
     <a href="index2.html"><b>Zenrin</b>Data</a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">ユーザーIDとパスワードを入力してください。</p>
+    <p class="error-txt">ログインに失敗しました。ユーザーIDかパスワードのどちらかが間違っています。</p>
 
     <form action="index2.html" method="post">
       <div class="form-group has-feedback">
@@ -44,9 +47,9 @@
         <input type="password" class="form-control" placeholder="Password">
       </div>
       <div class="row">
-        <div class="col-xs-8"></div>
+        <div class="col-md-8"></div>
         <!-- /.col -->
-        <div class="col-xs-4">
+        <div class="col-md-4">
           <button type="submit" class="btn btn-primary btn-block btn-flat">ログイン</button>
         </div>
         <!-- /.col -->
