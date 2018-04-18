@@ -33,10 +33,10 @@ Route::post('/auth/logout', array('uses' => 'Admin\LoginController@logout'));
 Route::post('/auth/checklogin', array('uses' => 'Admin\LoginController@checkLogin'));
 
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
-    Route::get('/', 'DashboardController@index');
-    Route::get('/monitoring', 'BackendController@monitoring');
-    Route::get('/monitoring/detail', 'BackendController@detail');
-    Route::get('/users', 'BackendController@users');
-    Route::get('/masters', 'BackendController@masters');
-    Route::get('/settings', 'BackendController@settings');
+    Route::get('/', 'DashboardController@index')->name('dashboard');
+    Route::get('/monitoring', 'BackendController@monitoring')->name('monitoring');
+    Route::get('/monitoring/detail', 'BackendController@detail')->name('monitoring');
+    Route::get('/users', 'BackendController@users')->name('users');
+    Route::get('/masters', 'BackendController@masters')->name('masters');
+    Route::get('/settings', 'BackendController@settings')->name('settings');
 });

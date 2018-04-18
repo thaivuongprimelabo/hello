@@ -126,11 +126,11 @@ desired effect
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="/admin"><i class="fa fa-link"></i> <span>管理画面TOP</span></a></li>
-        <li><a href="/admin/monitoring"><i class="fa fa-link"></i> <span>ログ閲覧</span></a></li>
-        <li><a href="/admin/users"><i class="fa fa-link"></i> <span>ユーザー管</span></a></li>
-        <li><a href="/admin/masters"><i class="fa fa-link"></i> <span>マスター管理</span></a></li>
-        <li><a href="/admin/settings"><i class="fa fa-link"></i> <span>設定管理</span></a></li>
+        <li {{ Route::currentRouteNamed('dashboard') ? 'class=active' : '' }} ><a href="/admin"><i class="fa fa-link"></i> <span>管理画面TOP</span></a></li>
+        <li {{ Route::currentRouteNamed('monitoring') ? 'class=active' : '' }}><a href="/admin/monitoring"><i class="fa fa-link"></i> <span>ログ閲覧</span></a></li>
+        <li {{ Route::currentRouteNamed('users') ? 'class=active' : '' }}><a href="/admin/users"><i class="fa fa-link"></i> <span>ユーザー管</span></a></li>
+        <li {{ Route::currentRouteNamed('masters') ? 'class=active' : '' }}><a href="/admin/masters"><i class="fa fa-link"></i> <span>マスター管理</span></a></li>
+        <li {{ Route::currentRouteNamed('settings') ? 'class=active' : '' }}><a href="/admin/settings"><i class="fa fa-link"></i> <span>設定管理</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
