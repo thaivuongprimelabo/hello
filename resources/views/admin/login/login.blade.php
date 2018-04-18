@@ -49,7 +49,7 @@
                         <input type="password" name="password" class="form-control" placeholder="<?= __('auth.login_password') ?>" required>
                     </div>
                     <div class="row">
-                        <div class="col-md-8"><small><?= __('auth.login_demo_acc') ?>:<br/>ID: songviytuong / P: cadillac</small></div>
+                        <div class="col-md-8"></div>
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary btn-block btn-flat"><?= __('auth.login_button') ?></button>
                         </div>
