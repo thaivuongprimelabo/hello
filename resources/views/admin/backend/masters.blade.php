@@ -3,7 +3,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    Page Header
+    Masters
     <small>Optional description</small>
   </h1>
   <ol class="breadcrumb">
@@ -14,7 +14,6 @@
 <!-- Main content -->
 <section class="content container-fluid">
 
-  <h3 class="title-01">左のメニューから目的の操作を選択してください。</h3>
 
 </section>
 <!-- /.content -->
