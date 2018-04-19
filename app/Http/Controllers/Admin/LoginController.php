@@ -32,7 +32,7 @@ class LoginController extends Controller {
     public function checkLogin() {
         $rules = array(
             'loginid' => 'required|min:3',
-            'password' => 'required|alphaNum|min:8|max:20'
+            'password' => 'required|min:8|max:20'
         );
 
         $validator = Validator::make(Input::all(), $rules);
