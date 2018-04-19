@@ -25,7 +25,7 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
         <link rel="stylesheet" href="{{ URL::to('/admin/') }}/css/custom-styles.css">
-        <meta name="csrf-token" content="{{ csrf_token() }}" />
+        <meta name="csrf-token" content="{{csrf_token()}}" />
         <!-- Google Font -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     </head>
@@ -36,9 +36,9 @@
                 <a href="{{ URL::to('/auth/') }}"><b>Zenrin</b>Data</a>
             </div>
             <div class="login-box-body">
-                <p class="login-box-msg"><?= __('auth.login_box_msg') ?></p>
+                <p class="login-box-msg"><?= __('auth.login_prompt') ?></p>
                 @if ($errors->has('loginid') || $errors->has('password'))
-                <p class="error-txt"><?= __('auth.login_error_txt') ?></p>
+                <p class="error-txt"><?= __('auth.login_failed') ?></p>
                 @endif
                 <form  method="POST" action="{{ url('/auth/checklogin') }}">
                     {{ csrf_field() }}
