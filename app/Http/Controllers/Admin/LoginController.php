@@ -31,7 +31,7 @@ class LoginController extends Controller {
 
     public function checkLogin() {
         $rules = array(
-            'loginid' => 'required',
+            'loginid' => 'required|min:3',
             'password' => 'required|alphaNum|min:8|max:20'
         );
 
