@@ -34,24 +34,8 @@
             }
         </style>
         <!-- Box Body -->
-        <div class="box">
-            <div class="box-header">
-                <div class="col-lg-10">
-                    <p><span>{{$paging['from']}} 件目～{{$paging['to']}}件目</span> <span>計: {{$paging['total']}}件</span></p>
-                </div>
-                <div class="col-lg-2" style="text-align:center;">
-                    {{$users->links()}}
-                </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-                <table class="table table-hover ">
-                    <tbody class="users" style="position: relative;">
-                        @include('admin.backend.users_ajax')
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.box-body -->
+        <div id="userBox" class="box">
+        	@include('admin.backend.users_ajax')
         </div>
         <!-- End Box -->
     </div>

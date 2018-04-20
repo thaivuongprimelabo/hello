@@ -71,7 +71,7 @@ class BackendController extends Controller {
         }
         
         $calls = Call::where($wheres)
-                    ->orderBy(DB::raw('DATE(all_start_time)'),'DESC')
+                    ->orderBy('all_start_time','desc')
                     ->paginate(config('master.ROW_PER_PAGE'));
         
         
