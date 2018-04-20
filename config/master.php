@@ -1,6 +1,10 @@
 <?php
 
 return [
+    
+    #GLOBAL
+    'Home_Title' => 'Zenrin Call System',
+    
     'TYPE_NAME' => [
         'SAME_TIME'      => '同報',
         'ORDER'          => '順次'
