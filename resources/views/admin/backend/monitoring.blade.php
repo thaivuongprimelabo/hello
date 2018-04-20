@@ -92,3 +92,6 @@
 
 <!-- /.content -->
 @endsection
+@section('script')
+    <script src="/assets/admin/js/custom-script.js"></script>
+@endsection
