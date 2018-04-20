@@ -18,6 +18,7 @@ class CreateCallsTable extends Migration
             $table->integer('id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->text('content');
+            $table->string('type')->comment('SAME_TIME|ORDER');
             $table->string('button_action',255);
             $table->string('call_number',32);
             $table->integer('call_time')->unsigned();
