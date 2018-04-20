@@ -6,6 +6,11 @@ html {
     padding:15px !important;
 }
 
+
+.box-header {
+    padding-top:20px;
+}
+
 .tooltip {
     min-width: 250px; //the minimum width
 }
@@ -14,4 +19,3 @@ html {
 	padding: 5px 0;
   margin-top: 10px;
 }
-
