@@ -9,7 +9,14 @@ $(window).on('hashchange', function () {
     }
 });
 $(document).ready(function () {
-	$('[data-toggle="tooltip"]').tooltip();
+	$(".table tbody tr").on('mousemove', function(e) {
+	  var id = $(this).attr('data-id');
+	  $(this).find('i').css({top: e.pageY, left: e.pageX });
+	  $(this).find('i').tooltip('show')
+	});
+	$(".table tbody tr").on('mouseleave', function(e) {
+	    $('[data-toggle="tooltip"]').tooltip('hide')
+	});
 	$('#datetimepicker-from').datetimepicker({
 		format: 'YYYY-MM-DD',
 	    locale: 'ja',

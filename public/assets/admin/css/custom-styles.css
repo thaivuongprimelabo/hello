@@ -5,3 +5,13 @@ html {
 .box-body {
     padding:15px !important;
 }
+
+.tooltip {
+    min-width: 250px; //the minimum width
+}
+
+.tooltip.bottom {
+	padding: 5px 0;
+  margin-top: 10px;
+}
+
