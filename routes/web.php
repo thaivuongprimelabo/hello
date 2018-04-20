@@ -35,7 +35,8 @@ Route::post('/auth/checklogin', array('uses' => 'Admin\LoginController@checkLogi
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     Route::get('/', 'DashboardController@index')->name('dashboard');
     Route::get('/monitoring', 'BackendController@monitoring')->name('monitoring');
-    Route::get('/monitoring/detail', 'BackendController@detail')->name('monitoring');
+    Route::post('/monitoring', 'BackendController@monitoring')->name('monitoring');
+    Route::get('/monitoring/detail/{id}', 'BackendController@detail')->name('monitoring_detail');
     Route::get('/users', 'BackendController@users')->name('users');
     Route::get('/users/edit/{id}', 'BackendController@editUser')->name('users');
     Route::get('/masters', 'BackendController@masters')->name('masters');

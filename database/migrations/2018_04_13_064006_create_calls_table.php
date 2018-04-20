@@ -25,6 +25,7 @@ class CreateCallsTable extends Migration
             $table->integer('current_trial')->unsigned();
             $table->integer('retry')->unsigned();
             $table->string('status',32);
+            $table->string('type',32);
             $table->timestamp('all_start_time')->useCurrent();
             $table->timestamp('all_end_time')->useCurrent();
             $table->timestamp('deleted_at')->nullable();

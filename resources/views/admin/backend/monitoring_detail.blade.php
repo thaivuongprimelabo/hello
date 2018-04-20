@@ -20,25 +20,25 @@
         <form role="form">
 
           <div class="col-md-6">
-            <p>発信開始日時: 2018-04-20 12:00:11</p>
-            <p>発信終了日時: 2018-04-20 12:12:15</p>
-            <p>通知タイプ:  同報</p>
-            <p>ボタンアクション: パターンA</p>
-            <p>リクエストしたユーザー: hoge</p>
-            <p>発信番号: 03-1234-5678</p>
-            <p>呼び出し時間: 60秒</p>
-            <p>リトライ: 1回</p>
-            <p>現在の試行回: 1回</p>
-            <p>実行状況: FINISHED</p>
+            <p>発信開始日時: {{ $calls['all_start_time'] }}</p>
+            <p>発信終了日時: {{ $calls['all_end_time'] }}</p>
+            <p>通知タイプ:  @php $typeNames = config('master.TYPE_NAME'); @endphp {{ $typeNames[$calls['type']] }}</p>
+            <p>ボタンアクション: {{ $calls['button_action'] }}</p>
+            <p>リクエストしたユーザー: {{ $calls['user_id'] }}</p>
+            <p>発信番号: {{ $calls['call_number'] }}</p>
+            <p>呼び出し時間: {{ $calls['call_time'] }}秒</p>
+            <p>リトライ: {{ $calls['retry'] }}回</p>
+            <p>現在の試行回: {{ $calls['current_trial'] }}回</p>
+            <p>実行状況: {{ $calls['status'] }}</p>
           </div>
 
           <div class="col-md-6">
             <div class="log-btn">
-              <a href="#!" class="btn btn-default btn-flat">閉じる</a>
+              <a href="{{ url('admin/monitoring') }}" class="btn btn-default btn-flat">閉じる</a>
               <a href="#!" class="btn btn-success btn-flat">更新</a>
             </div>
             <h4>音声通知内容</h4>
-            <p>〇〇で障害発生したエスカレーションです。<br>テストメッセージ。テストメッセージ。<br>テストメッセージ。テストメッセージ。テストメッセージ。テストメッセージ。テストメッセージ。テストメッセージ。<br>テストメッセージ。テストメッセージ。</p>
+            <p>{{ $calls['content'] }}</p>
           </div>
 
         </form>
@@ -54,76 +54,32 @@
       <!-- /.box-header -->
       <div class="box-body table-responsive no-padding">
         <table class="table table-hover">
-          <tbody><tr>
-            <th>試行回</th>
-            <th>順番</th>
-            <th>電話番号</th>
-            <th>ステータス</th>
-            <th>担当</th>
-            <th>押下ボタン</th>
-            <th>発信開始時間</th>
-            <th>発信終了時間</th>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>090-1234-5678</td>
-            <td><span class="label label-primary">FINISHED</span></td>
-            <td>-</td>
-            <td>2</td>
-            <td>2018-04-20 12:00:13</td>
-            <td>2018-04-20 12:08:34</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>090-1234-4321</td>
-            <td><span class="label label-danger">FINISHED</span></td>
-            <td>-</td>
-            <td>3</td>
-            <td>2018-04-20 12:00:15</td>
-            <td>2018-04-20 12:05:10</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>090-1234-5678</td>
-            <td><span class="label label-primary">FINISHED</span></td>
-            <td>-</td>
-            <td>2</td>
-            <td>2018-04-20 12:00:13</td>
-            <td>2018-04-20 12:08:34</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>090-1234-4321</td>
-            <td><span class="label label-danger">FINISHED</span></td>
-            <td>-</td>
-            <td>3</td>
-            <td>2018-04-20 12:00:15</td>
-            <td>2018-04-20 12:05:10</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>090-1234-5678</td>
-            <td><span class="label label-primary">FINISHED</span></td>
-            <td>-</td>
-            <td>2</td>
-            <td>2018-04-20 12:00:13</td>
-            <td>2018-04-20 12:08:34</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>090-1234-4321</td>
-            <td><span class="label label-danger">FINISHED</span></td>
-            <td>-</td>
-            <td>3</td>
-            <td>2018-04-20 12:00:15</td>
-            <td>2018-04-20 12:05:10</td>
-          </tr>
+          <thead>
+          	<tr>
+                <th>試行回</th>
+                <th>順番</th>
+                <th>電話番号</th>
+                <th>ステータス</th>
+                <th>担当</th>
+                <th>押下ボタン</th>
+                <th>発信開始時間</th>
+                <th>発信終了時間</th>
+          	</tr>
+          </thead>
+          <tbody>
+              @foreach($phoneDestinations as $item)
+              <tr data-toggle="tooltip" title="twilio call sid: [{{ $item['twilio_call_sid'] }}]">
+                <td>{{ $item['trial'] }}</td>
+                <td>{{ $item['order'] }}</td>
+                <td>{{ $item['phone_number'] }}</td>
+                <td><span class="label {{ $item['status'] == 'CANCELED' ? 'label-danger' : 'label-primary' }}">{{ $item['status'] }}</span></td>
+                <td>{{ $item['assigned'] }}</td>
+                <td>{{ $item['push_button'] }}</td>
+                <td>{{ $item['start_time'] }}</td>
+                <td>{{ $item['end_time'] }}</td>
+              </tr>
+              @endforeach
+          </tbody>
         </tbody></table>
       </div>
       <!-- /.box-body -->

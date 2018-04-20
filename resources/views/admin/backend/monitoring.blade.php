@@ -17,17 +17,17 @@
     <div class="box">
       <!-- Box Body -->
       <div class="box-body">
-        <form role="form">
-
           <div class="col-md-2">
             <div class="form-group">
               <label>通知タイプ</label>
-              <select class="form-control">
-                <option>option 1</option>
-                <option>option 2</option>
-                <option>option 3</option>
-                <option>option 4</option>
-                <option>option 5</option>
+              <select class="form-control" name="type" id="type">
+              	<option value="">{{ config('master.EMPTY_ITEM') }}</option>
+              	@php
+              		$type_names = config('master.TYPE_NAME');
+              	@endphp
+                @foreach($types as $item)
+                <option value="{{ $item['type'] }}" {{ $item['type'] == $select_type ? 'selected=selected' : '' }}>{{ $type_names[$item['type']] }}</option>
+                @endforeach
               </select>
             </div>
           </div>
@@ -35,12 +35,11 @@
           <div class="col-md-2">
             <div class="form-group">
               <label>発信番号</label>
-              <select class="form-control">
-                <option>option 1</option>
-                <option>option 2</option>
-                <option>option 3</option>
-                <option>option 4</option>
-                <option>option 5</option>
+              <select class="form-control" name="call_number" id="call_number">
+                <option value="">{{ config('master.EMPTY_ITEM') }}</option>
+                @foreach($source_phone_numbers as $number)
+                <option value="{{ $number['phone_number'] }}" {{ $number['phone_number'] == $select_call ? 'selected=selected' : '' }}">{{ $number['phone_number']  }}</option>
+                @endforeach
               </select>
             </div>
           </div>
@@ -48,12 +47,11 @@
           <div class="col-md-2">
             <div class="form-group">
               <label>ステータス</label>
-              <select class="form-control">
-                <option>option 1</option>
-                <option>option 2</option>
-                <option>option 3</option>
-                <option>option 4</option>
-                <option>option 5</option>
+              <select class="form-control" name="status" id="status">
+              <option value="">{{ config('master.EMPTY_ITEM') }}</option>
+                @foreach($status as $item)
+                <option value="{{ $item['status'] }}" {{ $item['status'] == $select_status ? 'selected=selected' : '' }}">{{ $item['status'] }}</option>
+                @endforeach
               </select>
             </div>
           </div>
@@ -61,92 +59,36 @@
           <div class="col-md-3">
             <div class="form-group">
               <label>From</label>
-              <select class="form-control">
-                <option>2018-04-05</option>
-                <option>2018-04-05</option>
-              </select>
+              	<div id="datetimepicker-from" class="date">
+                	<input type="text" class="form-control" value="{{ $dateFrom }}" name="datefrom" id="datefrom" />
+                </div>
             </div>
           </div>
 
           <div class="col-md-3">
             <div class="form-group">
               <label>To</label>
-              <select class="form-control">
-                <option>2018-09-05</option>
-                <option>2018-09-05</option>
-              </select>
+              <div id="datetimepicker-to" class="date">
+            		<input type="text" class="form-control" value="{{ $dateTo }}" name="dateto" id="dateto" />
+              </div>
             </div>
           </div>
 
           <div class="col-md-12">
-            <button type="submit" class="btn btn-primary pull-right">適用</button>
+            <button type="submit" id="search" class="btn btn-primary pull-right">適用</button>
           </div>
-
-        </form>
       </div>
       <!-- End Box Body -->
     </div>
 
     <!-- Box Body -->
-    <div class="box">
-      <div class="box-header">
-        <p class="box-note"><span>11 件目～20件目</span> <span>計: 35件</span></p>
-
-        <div class="box-tools">
-          <ul class="pagination pagination-sm no-margin pull-right">
-            <li><a href="#">«</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">»</a></li>
-          </ul>
-        </div>
-      </div>
-      <!-- /.box-header -->
-      <div class="box-body table-responsive no-padding">
-        <table class="table table-hover">
-          <tbody><tr>
-            <th>通知タイプ</th>
-            <th>音声内容</th>
-            <th>発信番号</th>
-            <th>ステータス</th>
-            <th>発信開始日時</th>
-          </tr>
-          <tr>
-            <td>同報</td>
-            <td>〇〇で障害が発生した...</td>
-            <td>03-1234-5678</td>
-            <td><span class="label label-primary">FINISHED</span></td>
-            <td>2018-04-20 12:00:01</td>
-          </tr>
-          <tr>
-            <td>順次</td>
-            <td>××で障害が発生した...</td>
-            <td>03-1234-5678</td>
-            <td><span class="label label-danger">CANCELED</span></td>
-            <td>2018-04-18 09:32:21</td>
-          </tr>
-          <tr>
-            <td>同報</td>
-            <td>〇〇で障害が発生した...</td>
-            <td>03-1234-5678</td>
-            <td><span class="label label-primary">FINISHED</span></td>
-            <td>2018-04-20 12:00:01</td>
-          </tr>
-          <tr>
-            <td>順次</td>
-            <td>××で障害が発生した...</td>
-            <td>03-1234-5678</td>
-            <td><span class="label label-danger">CANCELED</span></td>
-            <td>2018-04-18 09:32:21</td>
-          </tr>
-        </tbody></table>
-      </div>
-      <!-- /.box-body -->
+    <div id="logBox" class="box">
+      @include('admin.backend.monitoring_ajax')
     </div>
     <!-- End Box -->
   </div>
 
 </section>
+
 <!-- /.content -->
 @endsection
