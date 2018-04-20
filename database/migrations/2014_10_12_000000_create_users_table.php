@@ -49,6 +49,17 @@ class CreateUsersTable extends Migration
                     'locked' => 0
                 )
         );
+        
+        DB::table('users')->insert(array('id' => 3,'name' => 'Administrator','loginid' => 'songviytuong3','password' => Hash::make('cadillac'),'locked' => 0));
+        DB::table('users')->insert(array('id' => 4,'name' => 'Administrator','loginid' => 'songviytuong4','password' => Hash::make('cadillac'),'locked' => 0));
+        DB::table('users')->insert(array('id' => 5,'name' => 'Administrator','loginid' => 'songviytuong5','password' => Hash::make('cadillac'),'locked' => 1));
+        DB::table('users')->insert(array('id' => 6,'name' => 'Administrator','loginid' => 'songviytuong6','password' => Hash::make('cadillac'),'locked' => 1));
+        DB::table('users')->insert(array('id' => 7,'name' => 'Administrator','loginid' => 'songviytuong7','password' => Hash::make('cadillac'),'locked' => 0));
+        DB::table('users')->insert(array('id' => 8,'name' => 'Administrator','loginid' => 'songviytuong8','password' => Hash::make('cadillac'),'locked' => 0));
+        DB::table('users')->insert(array('id' => 9,'name' => 'Administrator','loginid' => 'songviytuong9','password' => Hash::make('cadillac'),'locked' => 0));
+        DB::table('users')->insert(array('id' => 10,'name' => 'Administrator','loginid' => 'songviytuong10','password' => Hash::make('cadillac'),'locked' => 0));
+        DB::table('users')->insert(array('id' => 11,'name' => 'Administrator','loginid' => 'songviytuong11','password' => Hash::make('cadillac'),'locked' => 0));
+        DB::table('users')->insert(array('id' => 12,'name' => 'Administrator','loginid' => 'songviytuong12','password' => Hash::make('cadillac'),'locked' => 0));
     }
 
     /**
