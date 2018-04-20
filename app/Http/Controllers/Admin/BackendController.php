@@ -14,15 +14,20 @@ use App\Models\Call;
 use App\Models\SourcePhoneNumber;
 use App\Models\PhoneDestination;
 
-class BackendController extends Controller {
-    
+class BackendController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth:web');
+    }
+
+
     public function index() {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
+
     }
 
     public function monitoring(Request $request) {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
-	
+
 	    // From
         $date = new \DateTime(date('Y-m-d'));
         $interval = new \DateInterval('P1M');
@@ -97,8 +102,6 @@ class BackendController extends Controller {
     }
 
     public function detail(Request $request) {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
-        
         // Check token
         if ($request['_token'] != md5($request->id . __FUNCTION__ . csrf_token())) {
             return redirect()->route('monitoring');
@@ -125,8 +128,6 @@ class BackendController extends Controller {
     public function users(Request $request) {
 //        $last = DB::table('users')->latest('id')->first();
 
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
-
         $users = Users::paginate(5);
         
         $paging = $users->toArray();
@@ -138,7 +139,6 @@ class BackendController extends Controller {
     }
 
     public function editUser($id, Request $request) {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
         if (isset($id)) {
             if ($request['_token'] == md5($id . __FUNCTION__ . csrf_token())) {
                 echo $id;
@@ -149,12 +149,11 @@ class BackendController extends Controller {
     }
 
     public function masters() {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
-        return view('admin.backend.masters');
+        $sourcePhoneNumber = SourcePhoneNumber::paginate(2);
+        return view('admin.backend.masters',compact('sourcePhoneNumber'));
     }
 
     public function settings() {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
         return view('admin.backend.settings');
     }
 
