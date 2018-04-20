@@ -40,5 +40,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     Route::get('/users', 'BackendController@users')->name('users');
     Route::get('/users/edit/{id}', 'BackendController@editUser')->name('users');
     Route::get('/masters', 'BackendController@masters')->name('masters');
+    Route::get('/masters/edit/{id}', 'BackendController@masterEdit')->name('masters_edit');
     Route::get('/settings', 'BackendController@settings')->name('settings');
 });

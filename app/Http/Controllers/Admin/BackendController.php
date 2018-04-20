@@ -149,8 +149,25 @@ class BackendController extends Controller
     }
 
     public function masters() {
-        $sourcePhoneNumber = SourcePhoneNumber::paginate(2);
-        return view('admin.backend.masters',compact('sourcePhoneNumber'));
+        $sourcePhoneNumber = SourcePhoneNumber::paginate(10);
+        return view('admin.backend.masters.masters',compact('sourcePhoneNumber'));
+    }
+
+    public function masterEdit(Request $request)
+    {
+        $exitRow = false;
+        if(!empty($request->id)) {
+            $sourcePhoneNumber = DB::table('source_phone_numbers')->where(['id'=>$request->id])->first();
+            if(!empty($sourcePhoneNumber)) {
+                $exitRow = true;
+            }
+        }
+
+        if(!$exitRow) {
+            return redirect('admin/masters');
+        }
+
+        return view('admin.backend.masters.masters_edit',compact('sourcePhoneNumber'));
     }
 
     public function settings() {
