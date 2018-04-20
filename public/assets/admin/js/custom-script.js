@@ -9,16 +9,35 @@ $(window).on('hashchange', function () {
     }
 });
 $(document).ready(function () {
-	$('#table tbody tr').tooltip();
-	$('#datetimepicker-from, #datetimepicker-to').datetimepicker({
+	$('[data-toggle="tooltip"]').tooltip();
+	$('#datetimepicker-from').datetimepicker({
 		format: 'YYYY-MM-DD',
 	    locale: 'ja',
 	    toolbarPlacement: 'bottom',
 	    showTodayButton: true,
 	    showClear: true,
 	    ignoreReadonly: true,
-	    allowInputToggle: true
+	    allowInputToggle: true,
 	});
+	
+	$('#datetimepicker-to').datetimepicker({
+		format: 'YYYY-MM-DD',
+	    locale: 'ja',
+	    toolbarPlacement: 'bottom',
+	    showTodayButton: true,
+	    showClear: true,
+	    ignoreReadonly: true,
+	    allowInputToggle: true,
+	    useCurrent: false,
+	    minDate: new Date($('#datefrom').val()),
+	    maxDate: new Date($('#dateto').val())
+	});
+	$("#datetimepicker-from").on("dp.change", function (e) {
+        $('#datetimepicker-to').data("DateTimePicker").minDate(e.date);
+    });
+    $("#datetimepicker-to").on("dp.change", function (e) {
+        $('#datetimepicker-from').data("DateTimePicker").maxDate(e.date);
+    });
 
 	$(document).on('click', '#search', function (event) {
 		var data = {

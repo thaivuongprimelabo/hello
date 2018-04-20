@@ -26,7 +26,7 @@
               		$type_names = config('master.TYPE_NAME');
               	@endphp
                 @foreach($types as $item)
-                <option value="{{ $item['type'] }}" {{ $item['type'] == $select_type ? 'selected=selected' : '' }}>{{ $type_names[$item['type']] }}</option>
+                <option value="{{ $item['type'] }}">{{ $type_names[$item['type']] }}</option>
                 @endforeach
               </select>
             </div>
@@ -38,7 +38,7 @@
               <select class="form-control" name="call_number" id="call_number">
                 <option value="">{{ config('master.EMPTY_ITEM') }}</option>
                 @foreach($source_phone_numbers as $number)
-                <option value="{{ $number['phone_number'] }}" {{ $number['phone_number'] == $select_call ? 'selected=selected' : '' }}">{{ $number['phone_number']  }}</option>
+                <option value="{{ $number['phone_number'] }}">{{ $number['phone_number']  }}</option>
                 @endforeach
               </select>
             </div>
@@ -50,7 +50,7 @@
               <select class="form-control" name="status" id="status">
               <option value="">{{ config('master.EMPTY_ITEM') }}</option>
                 @foreach($status as $item)
-                <option value="{{ $item['status'] }}" {{ $item['status'] == $select_status ? 'selected=selected' : '' }}">{{ $item['status'] }}</option>
+                <option value="{{ $item['status'] }}">{{ App\Helpers\Twilio::getStatus($item['status']) }}</option>
                 @endforeach
               </select>
             </div>

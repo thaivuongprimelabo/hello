@@ -1,5 +1,5 @@
 <div class="box-header">
-    <p class="box-note"><span>{{ $rowFrom }} 件目～{{ $rowTo }}件目</span> <span>計: {{ $calls->total() }}件</span></p>
+    <p class="box-note"><span>{{ $paging['from'] }} 件目～{{ $paging['to'] }}件目</span> <span>計: {{ $paging['total'] }}件</span></p>
     
     <div id="paging-monitoring" class="box-tools">
       {{ $calls->links() }}
