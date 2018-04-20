@@ -68,10 +68,13 @@
           </thead>
           <tbody>
               @foreach($phoneDestinations as $item)
-              <tr data-toggle="tooltip" data-placement="bottom" title="twilio call sid: [{{ $item['twilio_call_sid'] }}]">
+              <tr>
                 <td>{{ $item['trial'] }}</td>
                 <td>{{ $item['order'] }}</td>
-                <td>{{ $item['phone_number'] }}</td>
+                <td>
+                	{{ $item['phone_number'] }}
+                	<i data-toggle="tooltip" data-placement="bottom" title="twilio call sid: [{{ $item['twilio_call_sid'] }}]" data-animation="false" data-trigger="manual"/>
+                </td>
                 <td><span class="label {{ $item['status'] == 'CANCELED' ? 'label-danger' : 'label-primary' }}">{{ App\Helpers\Twilio::getStatus($item['status']) }}</span></td>
                 <td>{{ $item['assigned'] }}</td>
                 <td>{{ $item['push_button'] }}</td>
