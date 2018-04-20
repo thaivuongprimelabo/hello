@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Users;
 use View;
+use DB;
 
 class BackendController extends Controller {
     
@@ -27,14 +28,18 @@ class BackendController extends Controller {
     }
 
     public function users(Request $request) {
+//        $last = DB::table('users')->latest('id')->first();
+
         if (Auth::guest()) { return Redirect::to('/auth/login');}
 
         $users = Users::paginate(5);
+        
+        $paging = $users->toArray();
 
         if ($request->ajax()) {
-            return view('admin.backend.users_ajax', compact('users'));
+            return view('admin.backend.users_ajax', compact('users','paging'));
         }
-        return view('admin.backend.users', compact('users'));
+        return view('admin.backend.users', compact('users','paging'));
     }
 
     public function editUser($id, Request $request) {

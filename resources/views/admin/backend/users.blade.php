@@ -37,7 +37,7 @@
         <div class="box">
             <div class="box-header">
                 <div class="col-lg-10">
-                    <p><span>11 件目～20件目</span> <span>計: 35件</span></p>
+                    <p><span>{{$paging['from']}} 件目～{{$paging['to']}}件目</span> <span>計: {{$paging['total']}}件</span></p>
                 </div>
                 <div class="col-lg-2" style="text-align:center;">
                     {{$users->links()}}
