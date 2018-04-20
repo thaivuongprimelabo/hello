@@ -7,8 +7,8 @@
     <small>Optional description</small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href="{{URL::to('/assets/admin')}}"><i class="fa fa-dashboard"></i> Zenrin-Data</a></li>
-    <li class="active">Home</li>
+    <li><a href="{{Route('dashboard')}}"><i class="fa fa-dashboard"></i>{{Config::get('master.Home_Title')}}</a></li>
+    <li class="active">Masters</li>
   </ol>
 </section>
 <!-- Main content -->

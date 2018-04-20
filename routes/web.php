@@ -27,18 +27,36 @@ Route::get('/login', function() {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/auth', array('uses' => 'Admin\LoginController@index'));
-Route::get('/auth/login', array('uses' => 'Admin\LoginController@login'));
-Route::post('/auth/logout', array('uses' => 'Admin\LoginController@logout'));
-Route::post('/auth/checklogin', array('uses' => 'Admin\LoginController@checkLogin'));
+Route::group(['prefix' => 'auth', 'namespace' => 'Admin'], function () {
+    Route::get('/', array('uses' => 'LoginController@index'));
+    Route::get('/login', array('uses' => 'LoginController@login'));
+    Route::post('/logout', array('uses' => 'LoginController@logout'));
+    Route::post('/checklogin', array('uses' => 'LoginController@checkLogin'));
+});
 
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     Route::get('/', 'DashboardController@index')->name('dashboard');
-    Route::get('/monitoring', 'BackendController@monitoring')->name('monitoring');
-    Route::post('/monitoring', 'BackendController@monitoring')->name('monitoring');
-    Route::get('/monitoring/detail/{id}', 'BackendController@detail')->name('monitoring_detail');
-    Route::get('/users', 'BackendController@users')->name('users');
-    Route::get('/users/edit/{id}', 'BackendController@editUser')->name('users');
-    Route::get('/masters', 'BackendController@masters')->name('masters');
-    Route::get('/settings', 'BackendController@settings')->name('settings');
+
+    #Monitoring
+    Route::group(['prefix' => 'monitoring'], function () {
+        Route::get('/', 'BackendController@monitoring')->name('monitoring');
+        Route::post('/', 'BackendController@monitoring')->name('monitoring');
+        Route::get('/detail/{id}', 'BackendController@detail')->name('monitoring_detail');
+    });
+
+    #Users
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', 'BackendController@users')->name('users');
+        Route::get('/edit/{id}', 'BackendController@editUser')->name('users');
+    });
+
+    #Masters
+    Route::group(['prefix' => 'masters'], function () {
+        Route::get('/', 'BackendController@masters')->name('masters');
+    });
+
+    #Settings
+    Route::group(['prefix' => 'settings'], function () {
+        Route::get('/', 'BackendController@settings')->name('settings');
+    });
 });
