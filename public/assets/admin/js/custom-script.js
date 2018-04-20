@@ -11,8 +11,8 @@ $(window).on('hashchange', function () {
 $(document).ready(function () {
 	$(".table tbody tr").on('mousemove', function(e) {
 	  var id = $(this).attr('data-id');
-	  $("#img-tooltip" + id).css({top: e.pageY, left: e.pageX });
-	  $("#img-tooltip" + id).tooltip('show')
+	  $(this).find('i').css({top: e.pageY, left: e.pageX });
+	  $(this).find('i').tooltip('show')
 	});
 	$(".table tbody tr").on('mouseleave', function(e) {
 	    $('[data-toggle="tooltip"]').tooltip('hide')
