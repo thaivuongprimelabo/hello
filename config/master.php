@@ -11,5 +11,9 @@ return [
     ],
     'EMPTY_ITEM'   => '指定なし',
     'ROW_PER_PAGE' => 10,
-    'CONTENT_LENGTH' => 10
+    'CONTENT_LENGTH' => 10,
+    'KEYS' => [
+        'DEFAULT_RETRY'     => 'default_retry',
+        'DEFAULT_CALL_TIME' => 'default_call_time'
+    ]
 ];

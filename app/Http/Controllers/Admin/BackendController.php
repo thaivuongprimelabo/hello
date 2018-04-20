@@ -13,6 +13,7 @@ use View;
 use App\Models\Call;
 use App\Models\SourcePhoneNumber;
 use App\Models\PhoneDestination;
+use App\Models\SystemSetting;
 
 class BackendController extends Controller
 {
@@ -166,8 +167,38 @@ class BackendController extends Controller
         return view('admin.backend.masters.masters_edit',compact('sourcePhoneNumber'));
     }
 
-    public function settings() {
-        return view('admin.backend.settings');
+    public function settings(Request $request) {
+        
+        $systemSettings = SystemSetting::where('key','=',config('master.KEYS.DEFAULT_RETRY'))->orWhere('key','=',config('master.KEYS.DEFAULT_CALL_TIME'))->get();
+        $output = [];
+        foreach($systemSettings as $system) {
+            $output[$system['key']] = $system['value'];
+        }
+        if($request->isMethod('post')) {
+            
+            // Update retry
+            $retry = new SystemSetting();
+            if(isset($output[config('master.KEYS.DEFAULT_RETRY')])) {
+                $retry = SystemSetting::where('key', config('master.KEYS.DEFAULT_RETRY'));  
+            }
+                
+            $retry->key         = config('master.KEYS.DEFAULT_ENTRY');
+            $retry->value       = $request->retry;
+            $retry->save();
+            
+            // Update call time
+            $call_time = new SystemSetting();
+            if(isset($output[config('master.KEYS.DEFAULT_CALL_TIME')])) {
+                $call_time = SystemSetting::where('key', config('master.KEYS.DEFAULT_CALL_TIME'));
+            }
+            
+            $call_time->key     = config('master.KEYS.DEFAULT_CALL_TIME');
+            $call_time->value   = $request->call_time;
+            $call_time->save();
+            
+        }
+        
+        return view('admin.backend.settings', compact('output'));
     }
 
 }

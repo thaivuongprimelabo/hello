@@ -17,8 +17,8 @@
     <div class="box">
       <!-- Box Body -->
       <div class="box-body">
-        <form role="form">
-
+        <form role="form" method="post">
+		  {{ csrf_field() }}
           <p>設定が正しく反映されました。</p>
 
           <p>エラーが発生しました。</p>
@@ -28,7 +28,7 @@
                     <p class="text-center text-red">0～3の整数で入力してください。</p>
                     <p>
                         <label class="mr10">デフォルトリトライ回数</label>
-                        <input type="text" class="box_inline form-control w70" placeholder="0">
+                        <input type="text" class="box_inline form-control w70" placeholder="0" name="retry" value="{{ isset($output[config('master.KEYS.DEFAULT_RETRY')]) ? $output[config('master.KEYS.DEFAULT_RETRY')] : 0 }}">
                     </p>
               </div>
           </div>
@@ -38,7 +38,7 @@
                     <p class="text-center text-red">0～120の整数で入力してください。</p>
                     <div class="">
                         <label class="mr10">デフォルト呼び出し時間</label>
-                        <input type="text" class="box_inline form-control w70" placeholder="60">
+                        <input type="text" class="box_inline form-control w70" placeholder="60" name="call_time" value="{{ isset($output[config('master.KEYS.DEFAULT_CALL_TIME')]) ? $output[config('master.KEYS.DEFAULT_CALL_TIME')] : 0 }}">
                     </div>
               </div>
           </div>
