@@ -4,7 +4,7 @@ $(window).on('hashchange', function () {
         if (page == Number.NaN || page <= 0) {
             return false;
         } else {
-            getPosts(page);
+            getUsers(page);
         }
     }
 });
@@ -50,7 +50,7 @@ $(document).ready(function () {
             };
             getLogs(page, data);
         } else {
-        	getPosts(page);
+        	getUsers(page);
         }
     });
 });
@@ -71,13 +71,13 @@ function getLogs(page, data) {
     });
 }
 
-function getPosts(page) {
+function getUsers(page) {
     $.ajax({
         url: '?page=' + page,
         type: "get",
         datatype: "html",
     }).done(function (data) {
-        $('.users').empty().html(data);
+        $('#userBox').empty().html(data);
         location.hash = page;
     }).fail(function (jqXHR, ajaxOptions, thrownError) {
         alert('No response from server');

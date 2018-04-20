@@ -34,10 +34,10 @@ class CreatePhoneDestinationsTable extends Migration
             $table->foreign('call_id')->references('id')->on('calls');
         });
         
-        DB::table('phone_destinations')->insert(array('id' => 1,'call_id' => 1,'twilio_call_sid' => '99999999999','order' => 1, 'phone_number' => '03-5555-5555', 'status' => 'FINISHED', 'assigned' => 'TESTTTT', 'trial' => 9, 'call_time' => '10', 'push_button' => '更新'));
-        DB::table('phone_destinations')->insert(array('id' => 2,'call_id' => 1,'twilio_call_sid' => '99999999999','order' => 1, 'phone_number' => '03-5555-6666', 'status' => 'FINISHED', 'assigned' => 'TESTTTT', 'trial' => 9, 'call_time' => '10', 'push_button' => '更新'));
-        DB::table('phone_destinations')->insert(array('id' => 3,'call_id' => 1,'twilio_call_sid' => '99999999999','order' => 1, 'phone_number' => '03-5555-7777', 'status' => 'FINISHED', 'assigned' => 'TESTTTT', 'trial' => 9, 'call_time' => '10', 'push_button' => '更新'));
-        DB::table('phone_destinations')->insert(array('id' => 4,'call_id' => 2,'twilio_call_sid' => '88888888888','order' => 1, 'phone_number' => '01-2345-6789', 'status' => 'CANCELED', 'assigned' => 'TESTTTT', 'trial' => 9, 'call_time' => '10', 'push_button' => '更新'));
+            DB::table('phone_destinations')->insert(array('id' => 1,'call_id' => 1,'twilio_call_sid' => '99999999999','order' => 1, 'phone_number' => '03-5555-5555', 'status' => 'FINISHED', 'assigned' => 'TESTTTT', 'trial' => 9, 'call_time' => '10', 'push_button' => '更新','start_time' => '2018-04-19 09:54:51','end_time' => '2018-04-19 09:54:51'));
+            DB::table('phone_destinations')->insert(array('id' => 2,'call_id' => 1,'twilio_call_sid' => '99999999999','order' => 1, 'phone_number' => '03-5555-6666', 'status' => 'FINISHED', 'assigned' => 'TESTTTT', 'trial' => 9, 'call_time' => '10', 'push_button' => '更新','start_time' => '2018-04-19 09:54:51','end_time' => '2018-04-19 09:54:51'));
+            DB::table('phone_destinations')->insert(array('id' => 3,'call_id' => 1,'twilio_call_sid' => '99999999999','order' => 1, 'phone_number' => '03-5555-7777', 'status' => 'FINISHED', 'assigned' => 'TESTTTT', 'trial' => 9, 'call_time' => '10', 'push_button' => '更新','start_time' => '2018-04-19 09:54:51','end_time' => '2018-04-19 09:54:51'));
+            DB::table('phone_destinations')->insert(array('id' => 4,'call_id' => 2,'twilio_call_sid' => '88888888888','order' => 1, 'phone_number' => '01-2345-6789', 'status' => 'CANCELED', 'assigned' => 'TESTTTT', 'trial' => 9, 'call_time' => '10', 'push_button' => '更新','start_time' => '2018-04-19 09:54:51','end_time' => '2018-04-19 09:54:51'));
     }
 
     /**
