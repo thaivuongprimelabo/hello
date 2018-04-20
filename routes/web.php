@@ -23,7 +23,7 @@ Auth::routes();
 
 Route::get('/login', function() {
     return redirect('/auth/login');
-});
+})->name('login');;
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -53,10 +53,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     #Masters
     Route::group(['prefix' => 'masters'], function () {
         Route::get('/', 'BackendController@masters')->name('masters');
+        Route::get('/edit/{id}', 'BackendController@masterEdit')->name('masters_edit');
     });
 
     #Settings
     Route::group(['prefix' => 'settings'], function () {
         Route::get('/', 'BackendController@settings')->name('settings');
     });
+
 });

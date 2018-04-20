@@ -28,8 +28,18 @@
         <link rel="stylesheet" href="{{ URL::to('/assets/admin/') }}/css/custom-styles.css">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <!-- Google Font -->
-        <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+        <script src="{{ URL::to('/assets/admin/') }}/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment-with-locales.min.js"></script>
+        <!-- Bootstrap 3.3.7 -->
+        <script src="{{ URL::to('/assets/admin/') }}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" async="async"></script>
+        <!-- AdminLTE App -->
+        <script src="{{ URL::to('/assets/admin/') }}/dist/js/adminlte.min.js"></script>
+        <script src="/assets/admin/js/jquery.validate.js"></script>
+
+        <script> var MAIN_TOKEN = '<?php echo csrf_token() ?>'; </script>
     </head>
     <!--
     BODY TAG OPTIONS:
@@ -130,7 +140,7 @@
                         <!-- Optionally, you can add icons to the links -->
                         <li {{ Route::currentRouteNamed('dashboard') ? 'class=active' : '' }} ><a href="/admin"><i class="fa fa-link"></i> <span>管理画面TOP</span></a></li>
                         <li {{ Route::currentRouteNamed('monitoring') ? 'class=active' : '' }}><a href="/admin/monitoring"><i class="fa fa-link"></i> <span>ログ閲覧</span></a></li>
-                        <li {{ Route::currentRouteNamed('users') ? 'class=active' : '' }}><a href="/admin/users"><i class="fa fa-link"></i> <span>ユーザー管</span></a></li>
+                        <li {{ Route::currentRouteNamed('users') ? 'class=active' : '' }}><a href="/admin/users"><i class="fa fa-link"></i> <span>ユーザー管理</span></a></li>
                         <li {{ Route::currentRouteNamed('masters') ? 'class=active' : '' }}><a href="/admin/masters"><i class="fa fa-link"></i> <span>マスター管理</span></a></li>
                         <li {{ Route::currentRouteNamed('settings') ? 'class=active' : '' }}><a href="/admin/settings"><i class="fa fa-link"></i> <span>設定管理</span></a></li>
                     </ul>
@@ -231,27 +241,8 @@
             immediately after the control sidebar -->
             <div class="control-sidebar-bg"></div>
         </div>
-        <!-- ./wrapper -->
 
-        <!-- REQUIRED JS SCRIPTS -->
+        @yield('script')
 
-        <!-- jQuery 3 -->
-        <script src="{{ URL::to('/assets/admin/') }}/bower_components/jquery/dist/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment-with-locales.min.js"></script>
-        <!-- Bootstrap 3.3.7 -->
-        <script src="{{ URL::to('/assets/admin/') }}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" async="async"></script>
-        <!-- AdminLTE App -->
-        <script src="{{ URL::to('/assets/admin/') }}/dist/js/adminlte.min.js"></script>
-
-        <script src="{{ URL::to('/assets/admin/') }}/js/custom-script.js"></script>
-
-        <script>
-             var MAIN_TOKEN = '<?php echo csrf_token() ?>';
-        </script>
-
-        <!-- Optionally, you can add Slimscroll and FastClick plugins.
-             Both of these plugins are recommended to enhance the
-             user experience. -->
     </body>
 </html>

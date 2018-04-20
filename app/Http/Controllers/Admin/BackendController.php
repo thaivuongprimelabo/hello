@@ -14,15 +14,20 @@ use App\Models\Call;
 use App\Models\SourcePhoneNumber;
 use App\Models\PhoneDestination;
 
-class BackendController extends Controller {
-    
+class BackendController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth:web');
+    }
+
+
     public function index() {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
+
     }
 
     public function monitoring(Request $request) {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
-	
+
 	    // From
         $date = new \DateTime(date('Y-m-d'));
         $interval = new \DateInterval('P1M');
@@ -75,7 +80,7 @@ class BackendController extends Controller {
                     ->paginate(config('master.ROW_PER_PAGE'));
         
         
-        $tmpInfo = $calls->toArray();
+        $paging = $calls->toArray();
         
         // Output to view
         $output = [
@@ -85,11 +90,7 @@ class BackendController extends Controller {
             'calls'                 =>  $calls,
             'dateFrom'              =>  $request->datefrom,
             'dateTo'                =>  $request->dateto,
-            'rowFrom'               =>  empty($tmpInfo['from']) ? 0 : $tmpInfo['from'],
-            'rowTo'                 =>  empty($tmpInfo['to']) ? 0 : $tmpInfo['to'],
-            'select_type'           =>  $request->type,
-            'select_call'           =>  $request->call_number,
-            'select_status'         =>  $request->status,
+            'paging'                =>  $paging
         ];
         
         return $output;
@@ -97,8 +98,6 @@ class BackendController extends Controller {
     }
 
     public function detail(Request $request) {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
-        
         // Check token
         if ($request['_token'] != md5($request->id . __FUNCTION__ . csrf_token())) {
             return redirect()->route('monitoring');
@@ -125,8 +124,6 @@ class BackendController extends Controller {
     public function users(Request $request) {
 //        $last = DB::table('users')->latest('id')->first();
 
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
-
         $users = Users::paginate(5);
         
         $paging = $users->toArray();
@@ -138,7 +135,6 @@ class BackendController extends Controller {
     }
 
     public function editUser($id, Request $request) {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
         if (isset($id)) {
             if ($request['_token'] == md5($id . __FUNCTION__ . csrf_token())) {
                 echo $id;
@@ -149,12 +145,28 @@ class BackendController extends Controller {
     }
 
     public function masters() {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
-        return view('admin.backend.masters');
+        $sourcePhoneNumber = SourcePhoneNumber::paginate(10);
+        return view('admin.backend.masters.masters',compact('sourcePhoneNumber'));
+    }
+
+    public function masterEdit(Request $request)
+    {
+        $exitRow = false;
+        if(!empty($request->id)) {
+            $sourcePhoneNumber = DB::table('source_phone_numbers')->where(['id'=>$request->id])->first();
+            if(!empty($sourcePhoneNumber)) {
+                $exitRow = true;
+            }
+        }
+
+        if(!$exitRow) {
+            return redirect('admin/masters');
+        }
+
+        return view('admin.backend.masters.masters_edit',compact('sourcePhoneNumber'));
     }
 
     public function settings() {
-        if (Auth::guest()) { return Redirect::to('/auth/login');}
         return view('admin.backend.settings');
     }
 

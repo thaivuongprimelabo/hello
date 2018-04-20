@@ -26,6 +26,9 @@ class LoginController extends Controller {
     }
 
     public function login() {
+        if(Auth::user()) {
+            return redirect('admin');
+        }
         return View::make('admin.login.login');
     }
 
