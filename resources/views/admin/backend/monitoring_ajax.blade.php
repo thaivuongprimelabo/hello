@@ -24,7 +24,7 @@
             	$types = config('master.TYPE_NAME');
             @endphp
             <td>{{ $types[$call['type']] }}</td>
-            <td>{{ str_limit($call['content'], 20, '') }}</td>
+            <td>{{ mb_substr($call['content'], 0, config('master.CONTENT_LENGTH'), 'UTF-8') }}</td>
             <td>{{ $call['call_number'] }}</td>
             <td><span class="label @if($call['status'] == 'CANCELED') label-danger @else label-primary @endif" >{{ $call['status'] }}</span></td>
             <td>{{ $call['all_start_time'] }}</td>

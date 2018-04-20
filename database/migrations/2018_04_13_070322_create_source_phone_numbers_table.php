@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -21,6 +22,11 @@ class CreateSourcePhoneNumbersTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
+        
+        DB::table('source_phone_numbers')->insert(array('id' => 1,'phone_number' => '03-1234-5678','description' => 'TEST'));
+        DB::table('source_phone_numbers')->insert(array('id' => 2,'phone_number' => '03-9999-9999','description' => 'TEST'));
+        DB::table('source_phone_numbers')->insert(array('id' => 3,'phone_number' => '03-8888-9999','description' => 'TEST'));
+        DB::table('source_phone_numbers')->insert(array('id' => 4,'phone_number' => '03-0000-0000','description' => 'TEST'));
     }
 
     /**

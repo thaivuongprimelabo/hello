@@ -6,5 +6,6 @@ return [
         'ORDER'          => '順次'
     ],
     'EMPTY_ITEM'   => '指定なし',
-    'ROW_PER_PAGE' => 5
+    'ROW_PER_PAGE' => 10,
+    'CONTENT_LENGTH' => 10
 ];

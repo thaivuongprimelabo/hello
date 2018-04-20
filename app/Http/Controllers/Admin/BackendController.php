@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Users;
 use View;
-use DB;
 use App\Models\Call;
 use App\Models\SourcePhoneNumber;
 use App\Models\PhoneDestination;
