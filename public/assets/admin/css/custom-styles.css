@@ -5,3 +5,7 @@ html {
 .box-body {
     padding:15px !important;
 }
+
+.box-header {
+    padding-top:20px;
+}
