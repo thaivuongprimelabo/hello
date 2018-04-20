@@ -80,7 +80,7 @@ class BackendController extends Controller
                     ->paginate(config('master.ROW_PER_PAGE'));
         
         
-        $tmpInfo = $calls->toArray();
+        $paging = $calls->toArray();
         
         // Output to view
         $output = [
@@ -90,11 +90,7 @@ class BackendController extends Controller
             'calls'                 =>  $calls,
             'dateFrom'              =>  $request->datefrom,
             'dateTo'                =>  $request->dateto,
-            'rowFrom'               =>  empty($tmpInfo['from']) ? 0 : $tmpInfo['from'],
-            'rowTo'                 =>  empty($tmpInfo['to']) ? 0 : $tmpInfo['to'],
-            'select_type'           =>  $request->type,
-            'select_call'           =>  $request->call_number,
-            'select_status'         =>  $request->status,
+            'paging'                =>  $paging
         ];
         
         return $output;
