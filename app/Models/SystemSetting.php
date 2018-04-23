@@ -8,4 +8,7 @@ class SystemSetting extends Model
 {
     //
     protected $table = 'system_settings';
+    protected $fillable = ['key','value'];
+    protected $primaryKey  = 'key';
+    public $incrementing = false;
 }

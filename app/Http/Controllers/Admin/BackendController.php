@@ -14,6 +14,7 @@ use App\Models\Call;
 use App\Models\SourcePhoneNumber;
 use App\Models\PhoneDestination;
 use App\Models\SystemSetting;
+use Validator;
 
 class BackendController extends Controller
 {
@@ -168,34 +169,60 @@ class BackendController extends Controller
     }
 
     public function settings(Request $request) {
+        DB::enableQueryLog();
+        $systemSettings = SystemSetting::find([config('master.KEYS.DEFAULT_RETRY'), config('master.KEYS.DEFAULT_CALL_TIME')])
+                          ->toArray();
         
-        $systemSettings = SystemSetting::where('key','=',config('master.KEYS.DEFAULT_RETRY'))->orWhere('key','=',config('master.KEYS.DEFAULT_CALL_TIME'))->get();
-        $output = [];
+        $output = [
+            config('master.KEYS.DEFAULT_RETRY')     => 0,
+            config('master.KEYS.DEFAULT_CALL_TIME') => 0
+        ];
         foreach($systemSettings as $system) {
             $output[$system['key']] = $system['value'];
         }
+        
+        
         if($request->isMethod('post')) {
             
-            // Update retry
-            $retry = new SystemSetting();
-            if(isset($output[config('master.KEYS.DEFAULT_RETRY')])) {
-                $retry = SystemSetting::where('key', config('master.KEYS.DEFAULT_RETRY'));  
-            }
+            $messages = [
+                'integer'       => '0～3の整数で入力してください。',
+                'between'       => '{:min}～{:max}の整数で入力してください。',
+            ];
+            
+            $validator = Validator::make($request->all(),[
+                'retry'     =>  'integer|between:0,3',
+                'call_time' =>  'integer|between:0,120'
+            ], $messages);
+            
+            if(!$validator->fails()) {
                 
-            $retry->key         = config('master.KEYS.DEFAULT_ENTRY');
-            $retry->value       = $request->retry;
-            $retry->save();
-            
-            // Update call time
-            $call_time = new SystemSetting();
-            if(isset($output[config('master.KEYS.DEFAULT_CALL_TIME')])) {
-                $call_time = SystemSetting::where('key', config('master.KEYS.DEFAULT_CALL_TIME'));
+                // Update retry
+                DB::beginTransaction();
+                try {
+                    SystemSetting::updateOrCreate(
+                            ['key'   => config('master.KEYS.DEFAULT_RETRY')],
+                            ['value' => $request->retry]
+                        );
+                    
+                    SystemSetting::updateOrCreate(
+                            ['key'   => config('master.KEYS.DEFAULT_CALL_TIME')],
+                            ['value' => $request->call_time]
+                        );
+                    
+                    DB::commit();
+                    
+                    return redirect(route('settings'))->with('success', __('messages.MSG_SETTING_SUCCESS'));
+                    
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return redirect(route('settings'))->with('error',  __('messages.MSG_SETTING_ERROR'));
+                }
+                
+            } else {
+                
+                return redirect()->back()->withErrors($validator)->withInput();
+                
             }
-            
-            $call_time->key     = config('master.KEYS.DEFAULT_CALL_TIME');
-            $call_time->value   = $request->call_time;
-            $call_time->save();
-            
         }
         
         return view('admin.backend.settings', compact('output'));

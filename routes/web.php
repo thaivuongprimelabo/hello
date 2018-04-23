@@ -59,7 +59,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     #Settings
     Route::group(['prefix' => 'settings'], function () {
         Route::get('/', 'BackendController@settings')->name('settings');
-        Route::post('/', 'BackendController@settings')->name('settings');
+        Route::post('/', 'BackendController@settings');
     });
 
 });
