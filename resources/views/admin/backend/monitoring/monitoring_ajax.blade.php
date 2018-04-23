@@ -19,7 +19,7 @@
         </thead>
         <tbody>
           @foreach($calls as $call)
-          <tr data-id="{{ $call['id'] }}" data-token='<?= md5($call->id . 'detail' . csrf_token()) ?>' onclick="return detail(this);">
+          <tr data-id="{{ $call['id'] }}" data-token='<?= md5($call->id . 'detail' . csrf_token()) ?>' onclick="return detail(this);" style="cursor: pointer;">
             @php 
             	$types = config('master.TYPE_NAME');
             @endphp

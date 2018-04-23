@@ -19,8 +19,15 @@
             <div class="box-body">
                 <form method="POST" id="formFrm">
                     {{ csrf_field() }}
-                    <p>[ユーザー名]を作成しました。</p>
-                    <p>エラーが発生しました。</p>
+                    {{--<p>[ユーザー名]を作成しました。</p>--}}
+                    {{--<p>エラーが発生しました。</p>--}}
+                    <?php if(!empty($message)):?>
+                        <?php if($message['success']):?>
+                            <div class="alert alert-success"> {{ $message['message'] }} </div>
+                        <?php else:?>
+                            <div class="alert alert-danger"> {{ $message['message'] }} </div>
+                        <?php endif?>
+                    <?php endif?>
                     <div class="box-bor clearfix">
                         <h4>■ユーザー情報</h4>
                         <table class="table">
@@ -115,12 +122,28 @@
             }
 
             $("#confirm").click(function() {
-                var valName = validateName();
-                var valLoginId = validateLoginid();
-                var valPass = validatePassword();
-                if( valName && valLoginId && valPass) {
-                    $('#formFrm').submit();
-                }
+                // check loginID already exist
+                $.ajax({
+                    type: 'post',
+                    url: '{{route("users_cound_loginid")}}',
+                    data: {'loginid': $('#loginid').val().trim()},
+                    dataType: "json",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    success: function (result) {
+                        if (result.count > 0) {
+                            $('#loginid_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_010');?>');
+                        }
+                        else {
+                            // validate rules
+                            var valName = validateName();
+                            var valLoginId = validateLoginid();
+                            var valPass = validatePassword();
+                            if( valName && valLoginId && valPass) {
+                                $('#formFrm').submit();
+                            }
+                        }
+                    }
+                });
             });
         });
     </script>

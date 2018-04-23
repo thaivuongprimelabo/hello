@@ -37,7 +37,7 @@
                     <p class="text-center text-red">{{ $errors->first('retry') }}</p>
                     <p>
                         <label class="mr10">デフォルトリトライ回数</label>
-                        <input type="text" class="box_inline form-control w70" placeholder="0" maxlength="1" name="retry" value="{{ $errors->has('retry') ? old('retry') : $output[config('master.SETTINGS_DEFAULT_ENTRY')] }}" id="retry" required>
+                        <input type="text" class="box_inline form-control w70" placeholder="0" maxlength="1" name="retry" value="{{ $errors->has('retry') ? old('retry') : $output[config('master.SETTINGS.DEFAULT_RETRY')] }}" id="retry" required>
                     </p>
               </div>
           </div>
@@ -47,7 +47,7 @@
                     <p class="text-center text-red">{{ $errors->first('call_time') }}</p>
                     <p>
                         <label class="mr10">デフォルト呼び出し時間</label>
-                        <input type="text" class="box_inline form-control w70" placeholder="60" maxlength="3" name="call_time" value="{{ $errors->has('call_time') ? old('call_time') : $output[config('master.SETTINGS_DEFAULT_CALL_TIME')] }}" id="call_time" required>
+                        <input type="text" class="box_inline form-control w70" placeholder="60" maxlength="3" name="call_time" value="{{ $errors->has('call_time') ? old('call_time') : $output[config('master.SETTINGS.DEFAULT_CALL_TIME')] }}" id="call_time" required>
                     </p>
               </div>
           </div>
@@ -76,28 +76,32 @@ $(document).ready(function () {
 			retry: {
 				required: true,
 				digits:true,
-				range: [0,3]
+				range: [{{ config('master.SETTINGS.RETRY_MIN') }},{{ config('master.SETTINGS.RETRY_MAX') }}]
 			},
 			call_time: {
 				required: true,
 				digits:true,
-				range: [0,120]
+				range: [{{ config('master.SETTINGS.CALL_TIME_MIN') }},{{ config('master.SETTINGS.CALL_TIME_MAX') }}]
 			}
 		},
 		messages: {
 			retry : {
-				required	:'0～3の整数で入力してください。',
-				digits		:'0～3の整数で入力してください。',
-				range		:'0～3の整数で入力してください。'
+				required	: "{{ str_replace("{:min}", config('master.SETTINGS.RETRY_MIN') , str_replace("{:max}", config('master.SETTINGS.RETRY_MAX') ,__('messages.MSG_SETTING_VALIDATE'))) }}",
+				digits		: "{{ str_replace("{:min}", config('master.SETTINGS.RETRY_MIN') , str_replace("{:max}", config('master.SETTINGS.RETRY_MAX') ,__('messages.MSG_SETTING_VALIDATE'))) }}",
+				range		: "{{ str_replace("{:min}", config('master.SETTINGS.RETRY_MIN') , str_replace("{:max}", config('master.SETTINGS.RETRY_MAX') ,__('messages.MSG_SETTING_VALIDATE'))) }}"
 			},
 			call_time : {
-				required	:'0～120の整数で入力してください。',
-				digits		:'0～120の整数で入力してください。',
-				range		:'0～120の整数で入力してください。'
+				required	: "{{ str_replace("{:min}", config('master.SETTINGS.CALL_TIME_MIN') , str_replace("{:max}", config('master.SETTINGS.CALL_TIME_MAX') ,__('messages.MSG_SETTING_VALIDATE'))) }}",
+				digits		: "{{ str_replace("{:min}", config('master.SETTINGS.CALL_TIME_MIN') , str_replace("{:max}", config('master.SETTINGS.CALL_TIME_MAX') ,__('messages.MSG_SETTING_VALIDATE'))) }}",
+				range		: "{{ str_replace("{:min}", config('master.SETTINGS.CALL_TIME_MIN') , str_replace("{:max}", config('master.SETTINGS.CALL_TIME_MAX') ,__('messages.MSG_SETTING_VALIDATE'))) }}"
 			}
 		},
 		errorPlacement: function(error, element) {
 	    	error.appendTo( element.parent("p").prev("p") );
+	  	},
+	  	invalidHandler: function(form, validator) {
+	  	    $('.alert-success').hide();
+	  	  	$('.alert-danger').hide();
 	  	}
 	});
 });

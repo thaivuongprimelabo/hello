@@ -21,8 +21,17 @@
             <div class="box">
                 <div class="box-body">
                     <form method="POST" id="fromFrm">
-                        <p>[発信元番号]を作成しました。</p>
-                        <p>エラーが発生しました。</p>
+                        {{ csrf_field() }}
+                        {{--<p>[発信元番号]を作成しました。</p>--}}
+                        {{--<p>エラーが発生しました。</p>--}}
+                        @if(!empty($message))
+                            @if($message['success'])
+                                <div class="alert alert-success"> {{ $message['message'] }} </div>
+                            @else
+                                <div class="alert alert-danger"> {{ $message['message'] }} </div>
+                            @endif
+                        @endif
+
                         <div class="box-bor clearfix">
                             <h4>■発信元番号</h4>
                             <table class="table">
@@ -30,15 +39,15 @@
                                 <tr>
                                     <th>電話番号:</th>
                                     <td>
-                                        <p class="text-red" id="phone_number-error">電話番号は必須です。</p>
-                                        <input name="phone_number" type="text" class="box_inline form-control w30" placeholder="">
+                                        <p class="text-red" id="phone_number_error"></p>
+                                        <input name="phone_number" id="phone_number" type="text" class="box_inline form-control w30" placeholder="">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>ログインID:</th>
+                                    <th>説明</th>
                                     <td>
-                                        <p class="text-red">説明は必須です。</p>
-                                        <input name="description" type="text" class="box_inline form-control w30" placeholder="テキストテキスト" value="">
+                                        <p class="text-red" id="description_error"></p>
+                                        <input name="description" id="description" type="text" class="box_inline form-control w30" placeholder="テキストテキスト" value="">
                                     </td>
                                 </tr>
                                 </tbody></table>
@@ -55,17 +64,61 @@
         <script>
             $(document).ready(function(){
                 function validatePhoneNumber() {
+                    $('#phone_number_error').html('');
+                    var phone_number = $('#phone_number').val();
 
+                    if($.trim(phone_number) == '') {
+                        $('#phone_number_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_013');?>');
+                        return false;
+                    }
+
+                    var regex = /^(\d+-?)+\d+$/;
+                    if (!regex.test(phone_number))
+                    {
+                        $('#phone_number_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_005');?>');
+                        return false;
+                    }
+
+                    return true;
                 }
 
                 function validateDescription() {
+                    $('#description_error').html('');
+                    var description = $('#description').val();
 
+                    if($.trim(description) == '') {
+                        $('#description_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_014');?>');
+                        return false;
+                    }
+
+                    return true;
                 }
 
                 $("#confirm").click(function() {
-                    if(validatePhoneNumber() && validateDescription()) {
-                        $('#fromFrm').submit();
-                    }
+                    $.ajax({
+                        type: 'post',
+                        url: '{{route("masters_count_phone_number")}}',
+                        data: {'phone_number': $('#phone_number').val().trim()},
+                        dataType: "json",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        success: function (result) {
+                            if (result.count > 0) {
+                                console.log('vao');
+                                $('#phone_number_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_015');?>');
+                                validateDescription();
+                            }
+                            else {
+                                // validate rules
+                                var phoneNumber = validatePhoneNumber();
+                                var description = validateDescription();
+
+                                if(phoneNumber && description) {
+                                    $('#fromFrm').submit();
+                                }
+                            }
+                        }
+                    });
+
                 });
             });
         </script>

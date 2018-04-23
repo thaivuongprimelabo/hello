@@ -17,8 +17,8 @@
     <div class="box">
       <!-- Box Body -->
       <div class="box-body log-detail01">
-        <form role="form">
-
+        <form id="frmUpdate" role="form" method="post">
+			{{ csrf_field() }}
           <div class="col-md-6">
             <p>発信開始日時: {{ $calls['all_start_time'] }}</p>
             <p>発信終了日時: {{ $calls['all_end_time'] }}</p>
@@ -35,7 +35,7 @@
           <div class="col-md-6">
             <div class="log-btn">
               <a href="{{ url('admin/monitoring') }}" class="btn btn-default btn-flat">閉じる</a>
-              <a href="#!" class="btn btn-success btn-flat">更新</a>
+              <button type="submit" class="btn btn-success btn-flat">更新</button>
             </div>
             <h4>音声通知内容</h4>
             <p>{{ $calls['content'] }}</p>

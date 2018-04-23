@@ -42,21 +42,28 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('/', 'BackendController@monitoring')->name('monitoring');
         Route::post('/', 'BackendController@monitoring')->name('monitoring');
         Route::get('/detail/{id}', 'BackendController@detail')->name('monitoring_detail');
+        Route::post('/detail/{id}', 'BackendController@updateMonitoring');
     });
 
     #Users
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', 'BackendController@users')->name('users');
         Route::get('/edit/{id}', 'BackendController@usersEdit')->name('users_edit');
+        Route::post('/edit/{id}', 'BackendController@usersEdit')->name('users_edit');
         Route::get('/new', 'BackendController@usersNew')->name('users_new');
         Route::post('/new', 'BackendController@usersNew')->name('users_new');
+        Route::post('/coundLoginId', 'BackendController@coundLoginId')->name('users_cound_loginid');
+        Route::post('/lockUser', 'BackendController@lockUser')->name('users_lockuser');
     });
 
     #Masters
     Route::group(['prefix' => 'masters'], function () {
         Route::get('/', 'BackendController@masters')->name('masters');
         Route::get('/edit/{id}', 'BackendController@masterEdit')->name('masters_edit');
+        Route::post('/edit/{id}', 'BackendController@masterEdit')->name('masters_edit');
         Route::get('/new', 'BackendController@masterNew')->name('masters_new');
+        Route::post('/new', 'BackendController@masterNew')->name('masters_new');
+        Route::post('/countPhoneNumber', 'BackendController@countPhoneNumber')->name('masters_count_phone_number');
     });
 
     #Settings

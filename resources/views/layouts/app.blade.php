@@ -40,6 +40,7 @@
         <script src="/assets/admin/js/jquery.validate.js"></script>
 
         <script> var MAIN_TOKEN = '<?php echo csrf_token() ?>'; </script>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
     <!--
     BODY TAG OPTIONS:

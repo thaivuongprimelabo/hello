@@ -13,8 +13,9 @@ use View;
 use App\Models\Call;
 use App\Models\SourcePhoneNumber;
 use App\Models\PhoneDestination;
+use Illuminate\Support\Facades\Validator;
 use App\Models\SystemSetting;
-use Validator;
+//use Validator;
 
 class BackendController extends Controller
 {
@@ -122,11 +123,22 @@ class BackendController extends Controller
         ];
         return view('admin.backend.monitoring.monitoring_detail', $output);
     }
+    
+    public function updateMonitoring(Request $request) {
+        return redirect(url()->full());
+    }
 
     public function users(Request $request)
     {
-        $users = Users::paginate(10);
+        $users = Users::where('deleted_at',null)->paginate(10);
         return view('admin.backend.users.users', compact('users'));
+    }
+
+    public function coundLoginId(Request $request)
+    {
+        $loginid = $request->input('loginid');
+        $count = DB::table('users')->where(['loginid'=>$loginid])->count();
+        return ['count'=>$count];
     }
 
     public function usersEdit(Request $request)
@@ -143,26 +155,100 @@ class BackendController extends Controller
             return redirect('admin/users');
         }
 
-        return view('admin.backend.users.users_edit',compact('user'));
+        $message = ['info'=>[], 'pass'=>[]];
+        if($request->isMethod('post')) {
+            // edit info
+            if($request->edittype == 'editinfo') {
+                $validator = Validator::make($request->all(), [
+                    'name' => 'required|max:255',
+                    'loginid' => 'required|max:255',
+                ]);
+                if (!empty($validator) && $validator->fails()) {
+                    // fail
+                    $message['info']['success'] = 0;
+                    $message['info']['message'] = config('master.MESSAGE_NOTIFICATION.MSG_011');
+                }
+                else{
+                    DB::table('users')
+                        ->where('id', $request->id)
+                        ->update(['name' => $request->name, 'loginid' => $request->loginid]);
+                    $message['info']['success'] = 1;
+                    $message['info']['message'] = 'ユーザー情報 が正しく反映されました';
+                }
+            }
+            // edit password
+            elseif($request->edittype == 'editpass') {
+                $validator = Validator::make($request->all(), [
+                    'password' => 'required|min:8|max:255',
+                ]);
+                if (!empty($validator) && $validator->fails()) {
+                    // fail
+                    $message['pass']['success'] = 0;
+                    $message['pass']['message'] = config('master.MESSAGE_NOTIFICATION.MSG_011');
+                }
+                else{
+                    DB::table('users')
+                        ->where('id', $request->id)
+                        ->update(['password' => \Hash::make($request->password)]);
+                    $message['pass']['success'] = 1;
+                    $message['pass']['message'] = 'パスワード が正しく反映されました';
+                }
+            }
+            // delete user
+            elseif($request->edittype == 'deletetype') {
+                DB::table('users')
+                    ->where('id', $request->id)
+                    ->update(['deleted_at'=>date('Y-m-d h:i:s')]);
+                return redirect('admin/users');
+            }
+        }
+
+        $user = DB::table('users')->where(['id'=>$request->id])->first();
+        return view('admin.backend.users.users_edit',
+                     compact('user'), compact('message')
+                    )->with(['id'=>$request->id]);
+    }
+
+    public function lockUser(Request $request)
+    {
+        $count = DB::table('users')
+                    ->where('id', $request->id)
+                    ->update(['locked'=>$request->locked]);
+        return [];
     }
 
     public function usersNew(Request $request)
     {
+        $message = [];
         if($request->isMethod('post')) {
-            $data = $request->all();
-            $user = new Users();
-            $user->name = $request->name;
-            $user->loginid = $request->loginid;
-            $user->password = \Hash::make($request->password);
-            $user->save();
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|max:255',
+                'loginid' => 'required|max:255',
+                'password' => 'required|min:8|max:255',
+            ]);
+            if (!empty($validator) && $validator->fails()) {
+                // fail
+                $message['success'] = 0;
+                $message['message'] = config('master.MESSAGE_NOTIFICATION.MSG_011');;
+            }
+            else{
+                $user = new Users();
+                $user->id = Users::getIncrementId();
+                $user->name = $request->name;
+                $user->loginid = $request->loginid;
+                $user->password = \Hash::make($request->password);
+                $user->locked = 0;
+                $user->save();
+                $message['success'] = 1;
+                $message['message'] = $request->name . ' を作成しました。';
+            }
+
         }
-        return view('admin.backend.users.users_new');
+        return view('admin.backend.users.users_new')->with('message',$message);
     }
 
-
-
     public function masters() {
-        $sourcePhoneNumber = SourcePhoneNumber::paginate(10);
+        $sourcePhoneNumber = SourcePhoneNumber::where('deleted_at',null)->paginate(10);
         return view('admin.backend.masters.masters',compact('sourcePhoneNumber'));
     }
 
@@ -180,38 +266,108 @@ class BackendController extends Controller
             return redirect('admin/masters');
         }
 
-        return view('admin.backend.masters.masters_edit',compact('sourcePhoneNumber'));
+        $message = [];
+        if($request->isMethod('post')) {
+            // edit info
+            if($request->edittype == 'editinfo') {
+                $validator = Validator::make($request->all(), [
+                    'phone_number' => 'required|max:255',
+                    'description' => 'required|max:255',
+                ]);
+                if (!empty($validator) && $validator->fails()) {
+                    // fail
+                    $message['success'] = 0;
+                    $message['message'] = config('master.MESSAGE_NOTIFICATION.MSG_011');
+                }
+                else{
+                    DB::table('source_phone_numbers')
+                        ->where('id', $request->id)
+                        ->update(['phone_number' => $request->phone_number, 'description' => $request->description]);
+                    $message['success'] = 1;
+                    $message['message'] = config('master.MESSAGE_NOTIFICATION.MSG_016');
+                }
+            }
+            // delete user
+            elseif($request->edittype == 'dell_phone_number') {
+                DB::table('source_phone_numbers')
+                    ->where('id', $request->id)
+                    ->update(['deleted_at'=>date('Y-m-d h:i:s')]);
+                return redirect('admin/users');
+            }
+        }
+
+        $sourcePhoneNumber = DB::table('source_phone_numbers')->where(['id'=>$request->id])->first();
+
+        return view('admin.backend.masters.masters_edit',
+                    compact('sourcePhoneNumber'), compact('message')
+            );
     }
 
-    public function masterNew()
+    public function masterNew(Request $request)
     {
-        return view('admin.backend.masters.masters_new');
+        $message = [];
+        if($request->isMethod('post')) {
+            $validator = Validator::make($request->all(), [
+                'phone_number' => 'required|max:255',
+                'description' => 'required|max:255',
+            ]);
+            if (!empty($validator) && $validator->fails()) {
+                // fail
+                $message['success'] = 0;
+                $message['message'] = config('master.MESSAGE_NOTIFICATION.MSG_011');
+            }
+            else{
+                try{
+                    $count = DB::table('source_phone_numbers')
+                        ->where(['phone_number'=>$request->phone_number])
+                        ->count();
+                    if(!$count) {
+                        $phoneNumber = new SourcePhoneNumber();
+                        $phoneNumber->phone_number = $request->phone_number;
+                        $phoneNumber->description = $request->description;
+                        $phoneNumber->save();
+                        $message['success'] = 1;
+                        $message['message'] = $request->phone_number . ' を作成しました。';
+                    }
+                }
+                catch (\Exception $e){
+                    $message['success'] = 0;
+                    $message['message'] = config('master.MESSAGE_NOTIFICATION.MSG_011');
+                }
+            }
+        }
+        return view('admin.backend.masters.masters_new',compact('message'));
+    }
+
+    public function countPhoneNumber(Request $request)
+    {
+        $count = DB::table('source_phone_numbers')
+                    ->where(['phone_number'=>$request->phone_number])->count();
+        return ['count'=>$count];
     }
 
     public function settings(Request $request) {
-        DB::enableQueryLog();
-        $systemSettings = SystemSetting::find([config('master.SETTINGS_DEFAULT_ENTRY'), config('master.SETTINGS_DEFAULT_CALL_TIME')])
+        $systemSettings = SystemSetting::find([config('master.SETTINGS.DEFAULT_RETRY'), config('master.SETTINGS.DEFAULT_CALL_TIME')])
                           ->toArray();
         
         $output = [
-            config('master.SETTINGS_DEFAULT_ENTRY')     => 0,
-            config('master.SETTINGS_DEFAULT_CALL_TIME') => 0
+            config('master.SETTINGS.DEFAULT_RETRY')     => 0,
+            config('master.SETTINGS.DEFAULT_CALL_TIME') => 0
         ];
         foreach($systemSettings as $system) {
             $output[$system['key']] = $system['value'];
         }
         
-        
         if($request->isMethod('post')) {
             
             $messages = [
-                'integer'       => '0～3の整数で入力してください。',
-                'between'       => '{:min}～{:max}の整数で入力してください。',
+                'integer'       => __('messages.MSG_SETTING_VALIDATE'),
+                'between'       => __('messages.MSG_SETTING_VALIDATE'),
             ];
             
             $validator = Validator::make($request->all(),[
-                'retry'     =>  'integer|between:0,3',
-                'call_time' =>  'integer|between:0,120'
+                'retry'     =>  'integer|between:' . config('master.SETTINGS.RETRY_MIN') . ',' . config('master.SETTINGS.RETRY_MAX'),
+                'call_time' =>  'integer|between:' . config('master.SETTINGS.CALL_TIME_MIN') . ',' . config('master.SETTINGS.CALL_TIME_MAX')
             ], $messages);
             
             if(!$validator->fails()) {
@@ -220,12 +376,12 @@ class BackendController extends Controller
                 DB::beginTransaction();
                 try {
                     SystemSetting::updateOrCreate(
-                            ['key'   => config('master.SETTINGS_DEFAULT_ENTRY')],
+                            ['key'   => config('master.SETTINGS.DEFAULT_RETRY')],
                             ['value' => $request->retry]
                         );
                     
                     SystemSetting::updateOrCreate(
-                            ['key'   => config('master.SETTINGS_DEFAULT_CALL_TIME')],
+                            ['key'   => config('master.SETTINGS.DEFAULT_CALL_TIME')],
                             ['value' => $request->call_time]
                         );
                     
