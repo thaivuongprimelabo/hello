@@ -36,8 +36,7 @@ $(document).ready(function () {
 	    ignoreReadonly: true,
 	    allowInputToggle: true,
 	    useCurrent: false,
-	    minDate: new Date($('#datefrom').val()),
-	    maxDate: new Date($('#dateto').val())
+	    minDate: new Date($('#datefrom').val())
 	});
 	$("#datetimepicker-from").on("dp.change", function (e) {
         $('#datetimepicker-to').data("DateTimePicker").minDate(e.date);

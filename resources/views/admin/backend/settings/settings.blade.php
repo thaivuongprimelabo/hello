@@ -37,7 +37,7 @@
                     <p class="text-center text-red">{{ $errors->first('retry') }}</p>
                     <p>
                         <label class="mr10">デフォルトリトライ回数</label>
-                        <input type="text" class="box_inline form-control w70" placeholder="0" maxlength="1" name="retry" value="{{ $errors->has('retry') ? old('retry') : $output[config('master.KEYS.DEFAULT_RETRY')] }}" id="retry" required>
+                        <input type="text" class="box_inline form-control w70" placeholder="0" maxlength="1" name="retry" value="{{ $errors->has('retry') ? old('retry') : $output[config('master.SETTINGS_DEFAULT_ENTRY')] }}" id="retry" required>
                     </p>
               </div>
           </div>
@@ -47,7 +47,7 @@
                     <p class="text-center text-red">{{ $errors->first('call_time') }}</p>
                     <p>
                         <label class="mr10">デフォルト呼び出し時間</label>
-                        <input type="text" class="box_inline form-control w70" placeholder="60" maxlength="3" name="call_time" value="{{ $errors->has('call_time') ? old('call_time') : $output[config('master.KEYS.DEFAULT_CALL_TIME')] }}" id="call_time" required>
+                        <input type="text" class="box_inline form-control w70" placeholder="60" maxlength="3" name="call_time" value="{{ $errors->has('call_time') ? old('call_time') : $output[config('master.SETTINGS_DEFAULT_CALL_TIME')] }}" id="call_time" required>
                     </p>
               </div>
           </div>

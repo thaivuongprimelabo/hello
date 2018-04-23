@@ -83,7 +83,7 @@
 
     <!-- Box Body -->
     <div id="logBox" class="box">
-      @include('admin.backend.monitoring_ajax')
+      @include('admin.backend.monitoring.monitoring_ajax')
     </div>
     <!-- End Box -->
   </div>

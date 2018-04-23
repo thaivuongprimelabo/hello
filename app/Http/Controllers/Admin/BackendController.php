@@ -47,10 +47,10 @@ class BackendController extends Controller
         $output = $this->doSearch($request);
         
         if ($request->ajax()) {
-            return view('admin.backend.monitoring_ajax', $output);
+            return view('admin.backend.monitoring.monitoring_ajax', $output);
         }
         
-        return view('admin.backend.monitoring', $output);
+        return view('admin.backend.monitoring.monitoring', $output);
     }
     
     public function ajaxSearch(Request $request) {
@@ -120,31 +120,46 @@ class BackendController extends Controller
            'calls'              =>  $calls,
            'phoneDestinations'  =>  $phoneDestinations
         ];
-        return view('admin.backend.monitoring_detail', $output);
+        return view('admin.backend.monitoring.monitoring_detail', $output);
     }
 
-    public function users(Request $request) {
-//        $last = DB::table('users')->latest('id')->first();
-
-        $users = Users::paginate(5);
-        
-        $paging = $users->toArray();
-
-        if ($request->ajax()) {
-            return view('admin.backend.users_ajax', compact('users','paging'));
-        }
-        return view('admin.backend.users', compact('users','paging'));
+    public function users(Request $request)
+    {
+        $users = Users::paginate(10);
+        return view('admin.backend.users.users', compact('users'));
     }
 
-    public function editUser($id, Request $request) {
-        if (isset($id)) {
-            if ($request['_token'] == md5($id . __FUNCTION__ . csrf_token())) {
-                echo $id;
-            } else {
-                echo "die";
+    public function usersEdit(Request $request)
+    {
+        $exitRow = false;
+        if(!empty($request->id)) {
+            $user = DB::table('users')->where(['id'=>$request->id])->first();
+            if(!empty($user)) {
+                $exitRow = true;
             }
         }
+
+        if(!$exitRow) {
+            return redirect('admin/users');
+        }
+
+        return view('admin.backend.users.users_edit',compact('user'));
     }
+
+    public function usersNew(Request $request)
+    {
+        if($request->isMethod('post')) {
+            $data = $request->all();
+            $user = new Users();
+            $user->name = $request->name;
+            $user->loginid = $request->loginid;
+            $user->password = \Hash::make($request->password);
+            $user->save();
+        }
+        return view('admin.backend.users.users_new');
+    }
+
+
 
     public function masters() {
         $sourcePhoneNumber = SourcePhoneNumber::paginate(10);
@@ -168,14 +183,19 @@ class BackendController extends Controller
         return view('admin.backend.masters.masters_edit',compact('sourcePhoneNumber'));
     }
 
+    public function masterNew()
+    {
+        return view('admin.backend.masters.masters_new');
+    }
+
     public function settings(Request $request) {
         DB::enableQueryLog();
-        $systemSettings = SystemSetting::find([config('master.KEYS.DEFAULT_RETRY'), config('master.KEYS.DEFAULT_CALL_TIME')])
+        $systemSettings = SystemSetting::find([config('master.SETTINGS_DEFAULT_ENTRY'), config('master.SETTINGS_DEFAULT_CALL_TIME')])
                           ->toArray();
         
         $output = [
-            config('master.KEYS.DEFAULT_RETRY')     => 0,
-            config('master.KEYS.DEFAULT_CALL_TIME') => 0
+            config('master.SETTINGS_DEFAULT_ENTRY')     => 0,
+            config('master.SETTINGS_DEFAULT_CALL_TIME') => 0
         ];
         foreach($systemSettings as $system) {
             $output[$system['key']] = $system['value'];
@@ -200,12 +220,12 @@ class BackendController extends Controller
                 DB::beginTransaction();
                 try {
                     SystemSetting::updateOrCreate(
-                            ['key'   => config('master.KEYS.DEFAULT_RETRY')],
+                            ['key'   => config('master.SETTINGS_DEFAULT_ENTRY')],
                             ['value' => $request->retry]
                         );
                     
                     SystemSetting::updateOrCreate(
-                            ['key'   => config('master.KEYS.DEFAULT_CALL_TIME')],
+                            ['key'   => config('master.SETTINGS_DEFAULT_CALL_TIME')],
                             ['value' => $request->call_time]
                         );
                     
@@ -225,7 +245,7 @@ class BackendController extends Controller
             }
         }
         
-        return view('admin.backend.settings', compact('output'));
+        return view('admin.backend.settings.settings', compact('output'));
     }
 
 }

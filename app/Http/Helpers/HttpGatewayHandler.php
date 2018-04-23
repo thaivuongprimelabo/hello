@@ -103,7 +103,7 @@ class HttpGatewayHandler {
         print_r($result);
     }
 
-    public function getMsg($key = null, $lang = 'ja') {
+    public static function getMsg($key = null, $lang = 'ja') {
         $res = array(
             'en' => array(
                 'failed_authentication' => 'Failed Authentication',

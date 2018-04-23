@@ -14,7 +14,7 @@
                 <div class="box-body">
                     <form role="form">
                         <p>新しく発信元番号を追加する場合は以下のボタンを押してください。</p>
-                        <button type="submit" class="btn btn-primary btn-flat">発信元追加</button>
+                        <a href="/admin/masters/new" class="btn btn-primary btn-flat">発信元追加</a>
                     </form>
                 </div>
             </div>
