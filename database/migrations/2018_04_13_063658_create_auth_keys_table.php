@@ -4,18 +4,17 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAuthKeysTable extends Migration
-{
+class CreateAuthKeysTable extends Migration {
+
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         Schema::create('auth_keys', function (Blueprint $table) {
-            $table->primary('id');
-            $table->integer('id')->unsigned();
+//            $table->primary('id');
+            $table->increments('id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->string('auth_key')->unique();
             $table->timestamp('expired_at')->useCurrent();
@@ -30,8 +29,8 @@ class CreateAuthKeysTable extends Migration
      * 
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('auth_keys');
     }
+
 }

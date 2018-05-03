@@ -10,52 +10,55 @@ $(window).on('hashchange', function () {
 });
 $(document).ready(function () {
 	$(".table tbody tr").on('mousemove', function(e) {
-	  var id = $(this).attr('data-id');
-	  $(this).find('i').css({top: e.pageY, left: e.pageX });
-	  $(this).find('i').tooltip('show')
-	});
-	$(".table tbody tr").on('mouseleave', function(e) {
-	    $('[data-toggle="tooltip"]').tooltip('hide')
-	});
-	$('#datetimepicker-from').datetimepicker({
-		format: 'YYYY-MM-DD',
-	    locale: 'ja',
-	    toolbarPlacement: 'bottom',
-	    showTodayButton: true,
-	    showClear: true,
-	    ignoreReadonly: true,
-	    allowInputToggle: true,
-	});
-	
-	$('#datetimepicker-to').datetimepicker({
-		format: 'YYYY-MM-DD',
-	    locale: 'ja',
-	    toolbarPlacement: 'bottom',
-	    showTodayButton: true,
-	    showClear: true,
-	    ignoreReadonly: true,
-	    allowInputToggle: true,
-	    useCurrent: false,
-	    minDate: new Date($('#datefrom').val())
-	});
-	$("#datetimepicker-from").on("dp.change", function (e) {
+		  var id = $(this).attr('data-id');
+		  $(this).find('i').css({top: e.pageY, left: e.pageX });
+		  $(this).find('i').tooltip('show')
+		});
+		$(".table tbody tr").on('mouseleave', function(e) {
+		    $('[data-toggle="tooltip"]').tooltip('hide')
+		});
+    $('#datetimepicker-from').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'ja',
+        toolbarPlacement: 'bottom',
+        showTodayButton: false,
+	      showClear: false,
+        ignoreReadonly: true,
+        allowInputToggle: true,
+        useCurrent : false,
+	      maxDate: new Date()
+    });
+    
+    $('#datetimepicker-to').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'ja',
+        toolbarPlacement: 'bottom',
+        showTodayButton: false,
+	      showClear: false,
+        ignoreReadonly: true,
+        allowInputToggle: true,
+        useCurrent: false,
+        minDate: new Date($('#datefrom').val()),
+        maxDate: new Date($('#dateto').val())
+    });
+    $("#datetimepicker-from").on("dp.change", function (e) {
         $('#datetimepicker-to').data("DateTimePicker").minDate(e.date);
     });
     $("#datetimepicker-to").on("dp.change", function (e) {
         $('#datetimepicker-from').data("DateTimePicker").maxDate(e.date);
     });
 
-	$(document).on('click', '#search', function (event) {
-		var data = {
-        	type 		: $('#type').val(),
-        	call_number	: $('#call_number').val(),
-        	status		: $('#status').val(),
-        	datefrom	: $('#datefrom').val(),
-        	dateto		: $('#dateto').val()
+    $(document).on('click', '#search', function (event) {
+        var data = {
+            type: $('#type').val(),
+            call_number: $('#call_number').val(),
+            status: $('#status').val(),
+            datefrom: $('#datefrom').val(),
+            dateto: $('#dateto').val()
         };
         getLogs(1, data);
-	});
-	
+    });
+
     $(document).on('click', '.pagination a', function (event) {
         console.log('Click');
         $('li').removeClass('active');
@@ -64,18 +67,18 @@ $(document).ready(function () {
         var page = $(this).attr('href').split('page=')[1];
         // S102
         var divId = $(this).parent().parent().parent().attr('id');
-        if(divId === 'paging-monitoring') {
+        if (divId === 'paging-monitoring') {
             var data = {
-            	type 		: $('#type').val(),
-            	call_number	: $('#call_number').val(),
-            	status		: $('#status').val(),
-            	datefrom	: $('#datefrom').val(),
-            	dateto		: $('#dateto').val(),
-            	page		: page
+                type: $('#type').val(),
+                call_number: $('#call_number').val(),
+                status: $('#status').val(),
+                datefrom: $('#datefrom').val(),
+                dateto: $('#dateto').val(),
+                page: page
             };
             getLogs(page, data);
         } else {
-        	getUsers(page);
+            getUsers(page);
         }
     });
 });
@@ -109,8 +112,21 @@ function getUsers(page) {
     });
 }
 
+function back() {
+	var condition = $('#condition').val();
+	window.location.href = '/admin/monitoring/back/' + condition;
+}
+
 function detail(ob) {
-    window.location.href = '/admin/monitoring/detail/' + $(ob).attr("data-id") + '?_token=' + $(ob).attr("data-token");
+	var condition = [
+		$('#type').val(), 
+		$('#call_number').val(), 
+		$('#status').val(), 
+		$('#datefrom').val(), 
+		$('#dateto').val()
+	];
+	var search = condition.join();
+    window.location.href = '/admin/monitoring/detail/' + $(ob).attr("data-id") + '?_token=' + $(ob).attr("data-token") + '&condition=' + search;
 }
 
 function edit(ob) {

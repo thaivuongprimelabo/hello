@@ -14,8 +14,8 @@ class CreateCancelRequestsTable extends Migration
     public function up()
     {
         Schema::create('cancel_requests', function (Blueprint $table) {
-            $table->primary('id');
-            $table->integer('id')->unsigned();
+//            $table->primary('id');
+            $table->increments('id')->unsigned();
             $table->integer('call_id')->unsigned();
             $table->string('result',32)->comment('success | fail');
             $table->timestamp('deleted_at')->nullable();

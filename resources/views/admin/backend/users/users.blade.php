@@ -34,14 +34,16 @@
                         <th>名前</th>
                         <th>ログインID</th>
                         <th>ロック</th>
+                        <th>更新日時</th>
                         <th>作成日時</th>
                     </tr>
                     @foreach($users as $user)
-                        <tr class="user-row" data-text="{{ $user->id }}">
+                        <tr class="user-row pointer" data-text="{{ $user->id }}">
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->loginid }}</td>
                             <td><?= ($user->locked == 1) ? '<span class="glyphicon glyphicon-lock"></span>' : ''; ?></td>
+                            <td>{{ $user->updated_at }}</td>
                             <td>{{ $user->created_at }}</td>
                         </tr>
                     @endforeach
@@ -50,6 +52,10 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .pointer {cursor: pointer;}
+    </style>
 
 </section>
 @section('script')

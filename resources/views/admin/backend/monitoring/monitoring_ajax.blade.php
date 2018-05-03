@@ -2,7 +2,7 @@
     <p class="box-note"><span>{{ $paging['from'] }} 件目～{{ $paging['to'] }}件目</span> <span>計: {{ $paging['total'] }}件</span></p>
     
     <div id="paging-monitoring" class="box-tools">
-      {{ $calls->links() }}
+      {{ $calls->links('vendor.pagination.paging', ['paging' => $paging]) }}
     </div>
 </div>
 <!-- /.box-header -->
@@ -20,13 +20,10 @@
         <tbody>
           @foreach($calls as $call)
           <tr data-id="{{ $call['id'] }}" data-token='<?= md5($call->id . 'detail' . csrf_token()) ?>' onclick="return detail(this);" style="cursor: pointer;">
-            @php 
-            	$types = config('master.TYPE_NAME');
-            @endphp
-            <td>{{ $types[$call['type']] }}</td>
-            <td>{{ mb_substr($call['content'], 0, config('master.CONTENT_LENGTH'), 'UTF-8') }}</td>
+            <td>{{ App\Helpers\Twilio::getTypes(!empty($call['type']) ? $call['type'] : '1', Config::get('app.locale')) }}</td>
+            <td>{{ App\Helpers\Twilio::subStringBreakline($call['content'], 0, config('master.CONTENT_LENGTH')) }}</td>
             <td>{{ $call['call_number'] }}</td>
-            <td><span class="label @if($call['status'] == 'CANCELED') label-danger @else label-primary @endif" >{{ App\Helpers\Twilio::getStatus($call['status']) }}</span></td>
+            <td><span class="label @if($call['status'] == 'CANCELED') label-danger @else label-primary @endif" >{{ App\Helpers\Twilio::getStatus(!empty($call['status']) ? $call['status'] : '1', Config::get('app.locale')) }}</span></td>
             <td>{{ $call['all_start_time'] }}</td>
           </tr>
           @endforeach

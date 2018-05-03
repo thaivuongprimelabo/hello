@@ -10,12 +10,9 @@ html {
 .box-header {
     padding-top:20px;
 }
-
-.tooltip {
-    min-width: 250px; //the minimum width
-}
-
-.tooltip.bottom {
-	padding: 5px 0;
-  margin-top: 10px;
+.tooltip-inner {
+    max-width: 350px;
+    width: 350px;
+    text-align: left;
+    word-wrap: break-word;
 }

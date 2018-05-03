@@ -45,6 +45,17 @@ class BackendController extends Controller
             $request->dateto   = date('Y-m-d');
         }
         
+        if($request->session()->has('condition')) {
+            $string = $request->session()->get('condition');
+            $condition = explode(',', $string);
+            if($condition) {
+                $request->type          = isset($condition[0]) ? $condition[0] : '';
+                $request->call_number   = isset($condition[1]) ? $condition[1] : '';
+                $request->status        = isset($condition[2]) ? $condition[2] : '';
+                $request->datefrom      = isset($condition[3]) ? $condition[3] : '';
+                $request->dateto        = isset($condition[4]) ? $condition[4] : '';
+            }
+        }
         $output = $this->doSearch($request);
         
         if ($request->ajax()) {
@@ -61,6 +72,12 @@ class BackendController extends Controller
     
     private function doSearch($request) {
         
+        $output = [
+            'source_phone_numbers'  =>  SourcePhoneNumber::distinct()->get(['phone_number']),
+            'dateFrom'              =>  $request->datefrom,
+            'dateTo'                =>  $request->dateto,
+        ];
+        
         $wheres = [
             [DB::raw('DATE(all_start_time)'), '>=', $request->datefrom],
             [DB::raw('DATE(all_start_time)'),'<=', $request->dateto]
@@ -68,45 +85,54 @@ class BackendController extends Controller
         
         if(!empty($request->type)) {
             $wheres[]  = ['type', '=' , $request->type];
+            $output['type'] = $request->type;
         }
         
         if(!empty($request->call_number)) {
             $wheres[]  = ['call_number', '=' , $request->call_number];
+            $output['call_number'] = $request->call_number;
         }
         
         if(!empty($request->status)) {
             $wheres[]  = ['status', '=' , $request->status];
+            $output['status'] = $request->status;
         }
         
         $calls = Call::where($wheres)
                     ->orderBy('all_start_time','desc')
                     ->paginate(config('master.ROW_PER_PAGE'));
         
-        
         $paging = $calls->toArray();
         
-        // Output to view
-        $output = [
-            'types'                 =>  Call::distinct()->get(['type']),
-            'status'                =>  Call::distinct()->get(['status']),
-            'source_phone_numbers'  =>  SourcePhoneNumber::distinct()->get(['phone_number']),
-            'calls'                 =>  $calls,
-            'dateFrom'              =>  $request->datefrom,
-            'dateTo'                =>  $request->dateto,
-            'paging'                =>  $paging
-        ];
+        $output ['calls'] = $calls;
+        $output ['paging'] = $paging;
         
         return $output;
         
     }
-
+    
+    public function back(Request $request) {
+        $request->session()->flash('condition', $request->condition);
+        return redirect()->route('monitoring');
+    }
+    
     public function detail(Request $request) {
+        
+        if($request->condition) {
+            $request->session()->flash('condition', $request->condition);
+            return redirect('admin/monitoring/detail/' . $request->id . '?_token='. $request->_token);
+        }
+        
         // Check token
         if ($request['_token'] != md5($request->id . __FUNCTION__ . csrf_token())) {
             return redirect()->route('monitoring');
         }
         
         $calls              = Call::find($request->id);
+        
+        // Get call's user
+        $users  = $calls->User;
+        $calls['loginid'] = $users['loginid'];
         
         // If empty redirect to monitoring
         if(empty($calls)) {
@@ -171,9 +197,13 @@ class BackendController extends Controller
                 else{
                     DB::table('users')
                         ->where('id', $request->id)
-                        ->update(['name' => $request->name, 'loginid' => $request->loginid]);
+                        ->update([
+                            'name' => $request->name,
+                            'loginid' => $request->loginid,
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            ]);
                     $message['info']['success'] = 1;
-                    $message['info']['message'] = 'ユーザー情報 が正しく反映されました';
+                    $message['info']['message'] = config('master.MESSAGE_NOTIFICATION.MSG_019');
                 }
             }
             // edit password
@@ -189,18 +219,21 @@ class BackendController extends Controller
                 else{
                     DB::table('users')
                         ->where('id', $request->id)
-                        ->update(['password' => \Hash::make($request->password)]);
+                        ->update([
+                            'password' => \Hash::make($request->password),
+                            'updated_at' => date('Y-m-d H:i:s'),
+                          ]);
                     $message['pass']['success'] = 1;
-                    $message['pass']['message'] = 'パスワード が正しく反映されました';
+                    $message['pass']['message'] = config('master.MESSAGE_NOTIFICATION.MSG_018');
                 }
             }
-            // delete user
-            elseif($request->edittype == 'deletetype') {
+            // delete user  -- remove
+            /*elseif($request->edittype == 'deletetype') {
                 DB::table('users')
                     ->where('id', $request->id)
                     ->update(['deleted_at'=>date('Y-m-d h:i:s')]);
                 return redirect('admin/users');
-            }
+            }*/
         }
 
         $user = DB::table('users')->where(['id'=>$request->id])->first();
@@ -232,15 +265,20 @@ class BackendController extends Controller
                 $message['message'] = config('master.MESSAGE_NOTIFICATION.MSG_011');;
             }
             else{
-                $user = new Users();
-                $user->id = Users::getIncrementId();
-                $user->name = $request->name;
-                $user->loginid = $request->loginid;
-                $user->password = \Hash::make($request->password);
-                $user->locked = 0;
-                $user->save();
-                $message['success'] = 1;
-                $message['message'] = $request->name . ' を作成しました。';
+                $count = DB::table('users')
+                        ->where(['loginid'=>$request->loginid])
+                        ->count();
+                if(!$count) {
+                    $user = new Users();
+                    $user->id = Users::getIncrementId();
+                    $user->name = $request->name;
+                    $user->loginid = $request->loginid;
+                    $user->password = \Hash::make($request->password);
+                    $user->locked = 0;
+                    $user->save();
+                    $message['success'] = 1;
+                    $message['message'] = $request->name . config('master.MESSAGE_NOTIFICATION.MSG_020');;
+                }
             }
 
         }
@@ -292,7 +330,7 @@ class BackendController extends Controller
                 DB::table('source_phone_numbers')
                     ->where('id', $request->id)
                     ->update(['deleted_at'=>date('Y-m-d h:i:s')]);
-                return redirect('admin/users');
+                return redirect('admin/masters');
             }
         }
 
@@ -327,7 +365,7 @@ class BackendController extends Controller
                         $phoneNumber->description = $request->description;
                         $phoneNumber->save();
                         $message['success'] = 1;
-                        $message['message'] = $request->phone_number . ' を作成しました。';
+                        $message['message'] = $request->phone_number . config('master.MESSAGE_NOTIFICATION.MSG_020');
                     }
                 }
                 catch (\Exception $e){
@@ -361,7 +399,6 @@ class BackendController extends Controller
         if($request->isMethod('post')) {
             
             $messages = [
-                'integer'       => __('messages.MSG_SETTING_VALIDATE'),
                 'between'       => __('messages.MSG_SETTING_VALIDATE'),
             ];
             

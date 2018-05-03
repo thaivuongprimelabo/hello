@@ -43,6 +43,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::post('/', 'BackendController@monitoring')->name('monitoring');
         Route::get('/detail/{id}', 'BackendController@detail')->name('monitoring_detail');
         Route::post('/detail/{id}', 'BackendController@updateMonitoring');
+        Route::get('/back/{condition}', 'BackendController@back');
     });
 
     #Users
@@ -75,9 +76,25 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 });
 
 Route::group(['prefix' => 'api', 'namespace' => 'Api'], function () {
+    if (env('APP_ENV') == 'local') {
+        Route::get('/', 'ApiController@index')->name('myAuthenticate');
+    }
+    
+    Route::get('/twilio/call', 'ApiController@twilioCallTest')->name('myAuthenticate');
+    
+    Route::get('/twilio/call/{id}', 'ApiController@twilioCall')->name('myAuthenticate');
+    Route::post('/twilio/call/{id}', 'ApiController@twilioCall')->name('myAuthenticate');
+    
+    Route::get('/{a}/{b}', 'ApiController@notfound')->name('myAuthenticate');
     Route::post('/my/authenticate', 'ApiController@myAuthenticate')->name('myAuthenticate');
     Route::post('/calls/create', 'ApiController@callCreate')->name('myAuthenticate');
     Route::post('/calls/cancel', 'ApiController@callCancel')->name('myAuthenticate');
     Route::post('/calls/status', 'ApiController@callStatus')->name('myAuthenticate');
     Route::post('/calls/search', 'ApiController@callSearch')->name('myAuthenticate');
+
+    Route::get('/twilio/makecall/{id}', 'ApiController@makeCall')->name('myAuthenticate');
+    Route::get('/twilio/stopcall/{id}', 'ApiController@stopCall')->name('myAuthenticate');
+    Route::get('/twilio/status-event/{id}', 'ApiController@twilioStatusEvent')->name('myAuthenticate');
+    Route::post('/twilio/status-event/{id}', 'ApiController@twilioStatusEvent')->name('myAuthenticate');
+
 });

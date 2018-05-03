@@ -101,7 +101,8 @@
                     </div>
                 </div>
 
-                <div class="box-bor clearfix">
+                {{--remove delete function--}}
+                {{--<div class="box-bor clearfix">
                     <h4>■ユーザー削除</h4>
                     <p>ユーザーを削除します。</p>
 
@@ -112,7 +113,7 @@
                             <button id="comfirmDelete" type="button" class="btn btn-danger btn-flat pull-right">削除</button>
                         </form>
                     </div>
-                </div>
+                </div>--}}
 
             </div>
 
@@ -133,8 +134,18 @@
                     valid = false;
                 }
 
+                if(name.length >= 255) {
+                    $('#name_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_004');?>');
+                    valid = false;
+                }
+
                 if($.trim(loginid) == '') {
                     $('#loginid_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_007');?>');
+                    valid = false;
+                }
+
+                if(loginid.length >= 255) {
+                    $('#loginid_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_004');?>');
                     valid = false;
                 }
 
@@ -147,6 +158,11 @@
 
                 if($.trim(password) == '') {
                     $('#password_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_008');?>');
+                    return false;
+                }
+
+                if(password.length >= 255) {
+                    $('#password_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_004');?>');
                     return false;
                 }
 

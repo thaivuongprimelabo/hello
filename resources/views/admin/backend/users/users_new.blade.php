@@ -48,7 +48,7 @@
                             <tr>
                                 <th>パスワード:</th>
                                 <td>
-                                    <p class="text-red" id="password_error">パスワードは8文字以上の英数字で入力してください。</p>
+                                    <p class="text-red" id="password_error"></p>
                                     <input id="password" name="password" type="password" class="box_inline form-control w30" placeholder="********">
                                 </td>
                             </tr>
@@ -108,6 +108,11 @@
                 var password = $('#password').val();
                 if($.trim(password) == ''){
                     $('#password_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_008');?>');
+                    return false;
+                }
+
+                if(password.length >= 255) {
+                    $('#password_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_004');?>');
                     return false;
                 }
 

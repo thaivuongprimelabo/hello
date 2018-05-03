@@ -85,6 +85,11 @@
                         return false;
                     }
 
+                    if(phone_number.length >= 255) {
+                        $('#phone_number_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_004');?>');
+                        return false;
+                    }
+
                     var regex = /^(\d+-?)+\d+$/;
                     if (!regex.test(phone_number))
                     {
@@ -101,6 +106,11 @@
 
                     if($.trim(description) == '') {
                         $('#description_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_014');?>');
+                        return false;
+                    }
+
+                    if(description.length >= 255) {
+                        $('#description_error').html( '<?= config('master.MESSAGE_NOTIFICATION.MSG_004');?>');
                         return false;
                     }
 

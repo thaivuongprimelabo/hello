@@ -37,16 +37,16 @@
             </div>
             <div class="login-box-body">
                 <p class="login-box-msg"><?= __('auth.login_prompt') ?></p>
-                @if ($errors->has('loginid') || $errors->has('password'))
+                @if ($errors->has('loginid') || $errors->has('password') || $errors->has('message1'))
                 <p class="error-txt"><?= __('auth.login_failed') ?></p>
                 @endif
                 <form  method="POST" action="{{ url('/auth/checklogin') }}">
                     {{ csrf_field() }}
                     <div class="form-group has-feedback">
-                        <input type="text" name="loginid" class="form-control" placeholder="<?= __('auth.login_login_id') ?>"  required autofocus>
+                        <input type="text" name="loginid" class="form-control" placeholder="<?= __('auth.login_login_id') ?>" autofocus>
                     </div>
                     <div class="form-group has-feedback">
-                        <input type="password" name="password" class="form-control" placeholder="<?= __('auth.login_password') ?>" required>
+                        <input type="password" name="password" class="form-control" placeholder="<?= __('auth.login_password') ?>">
                     </div>
                     <div class="row">
                         <div class="col-md-8"></div>

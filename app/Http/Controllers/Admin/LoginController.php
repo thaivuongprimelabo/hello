@@ -45,7 +45,6 @@ class LoginController extends Controller {
                             ->withErrors($validator)
                             ->withInput();
         } else {
-
             $userdata = array(
                 'loginid' => Input::get('loginid'),
                 'password' => Input::get('password')
@@ -54,7 +53,7 @@ class LoginController extends Controller {
             if (Auth::attempt($userdata)) {
                 return Redirect::to('/admin');
             } else {
-                return Redirect::to('/auth/login');
+                return Redirect::to('/auth/login')->withErrors(['message1'=>'loginid & password is not correct']);
             }
         }
     }

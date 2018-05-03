@@ -24,8 +24,8 @@ class CreateSourcePhoneNumbersTable extends Migration
         });
         
         DB::table('source_phone_numbers')->insert(array('id' => 1,'phone_number' => '03-1234-5678','description' => 'TEST'));
-        DB::table('source_phone_numbers')->insert(array('id' => 2,'phone_number' => '03-9999-9999','description' => 'TEST'));
-        DB::table('source_phone_numbers')->insert(array('id' => 3,'phone_number' => '03-8888-9999','description' => 'TEST'));
+        DB::table('source_phone_numbers')->insert(array('id' => 2,'phone_number' => '03-1122-2233','description' => 'TEST'));
+        DB::table('source_phone_numbers')->insert(array('id' => 3,'phone_number' => '03-3344-4455','description' => 'TEST'));
         DB::table('source_phone_numbers')->insert(array('id' => 4,'phone_number' => '03-0000-0000','description' => 'TEST'));
     }
 

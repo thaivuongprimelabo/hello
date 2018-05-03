@@ -28,9 +28,9 @@
         @endif
         <form id="frmForm" role="form" method="post">
 		  {{ csrf_field() }}
-          <p>設定が正しく反映されました。</p>
-
-          <p>エラーが発生しました。</p>
+		  <div id="err_validate" class="alert alert-danger" style="display:none">
+          	<p>エラーが発生しました。</p>
+          </div>
           
           <div class="box-row">
               <div class="box-w80">
@@ -47,7 +47,7 @@
                     <p class="text-center text-red">{{ $errors->first('call_time') }}</p>
                     <p>
                         <label class="mr10">デフォルト呼び出し時間</label>
-                        <input type="text" class="box_inline form-control w70" placeholder="60" maxlength="3" name="call_time" value="{{ $errors->has('call_time') ? old('call_time') : $output[config('master.SETTINGS.DEFAULT_CALL_TIME')] }}" id="call_time" required>
+                        <input type="text" class="box_inline form-control w70" placeholder="60" maxlength="3" name="call_time" value="{{ $errors->has('call_time') ? old('call_time') : $output[config('master.SETTINGS.DEFAULT_CALL_TIME')] }}" id="call_time" required>&nbsp;&nbsp;秒
                     </p>
               </div>
           </div>
@@ -102,6 +102,7 @@ $(document).ready(function () {
 	  	invalidHandler: function(form, validator) {
 	  	    $('.alert-success').hide();
 	  	  	$('.alert-danger').hide();
+	  	  	$('#err_validate').show();
 	  	}
 	});
 });

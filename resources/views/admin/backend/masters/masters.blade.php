@@ -38,7 +38,7 @@
                             <th>作成日時</th>
                         </tr>
                         @foreach($sourcePhoneNumber as $row)
-                            <tr class="phone-row" data-text="{{ $row->id }}">
+                            <tr class="phone-row pointer" data-text="{{ $row->id }}">
                                 <td>{{ $row->id }}</td>
                                 <td>{{ $row->phone_number }}</td>
                                 <td>{{ $row->description }}</td>
@@ -51,7 +51,9 @@
             </div>
         </div>
 
-
+        <style>
+            .pointer {cursor: pointer;}
+        </style>
 
     </section>
 @endsection
@@ -60,7 +62,6 @@
     <script>
         $(document).ready(function(){
             $('.phone-row').click(function(){
-                console.log();
                 window.location.href = 'masters/edit/'+$(this).attr('data-text');
             })
         });

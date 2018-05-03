@@ -5,10 +5,12 @@ namespace App\Helpers;
 class HttpGatewayHandler {
 
     static $_apiUrl = "";
-    static $_apiKey = "AC7ab74e95bb637afb9ecae4259259ca58";
-    static $_apiSecretKey = "d12233f4c5d39bf23a264e8c8edd462a";
+    static $_apiKey = "AC65e784efa6dcfdc3e98a8fe076158dda";
+    static $_apiSecretKey = "862d6f19f41ecd596fc3fdd86f16ca7a";
     static $_clientID = "";
     static $_clientPassword = "";
+    static $_auth_Username = "";
+    static $_auth_Password = "";
     static $_content_type = "application/x-www-form-urlencoded";
 
     public static function setUrl($url) {
@@ -51,6 +53,22 @@ class HttpGatewayHandler {
         return self::$_clientPassword;
     }
 
+    public static function setAuthUsername($AuthUsername) {
+        return self::$_auth_Username = $AuthUsername;
+    }
+
+    public static function getAuthUsername() {
+        return self::$_auth_Username;
+    }
+
+    public static function setAuthPassword($AuthPassword) {
+        return self::$_auth_Password = $AuthPassword;
+    }
+
+    public static function getAuthPassword() {
+        return self::$_auth_Password;
+    }
+
     public static function setContentType($content_type) {
         return self::$_content_type = $content_type;
     }
@@ -83,53 +101,34 @@ class HttpGatewayHandler {
         $params = array(
         );
 
+        $username = self::$_auth_Username;
+        $password = self::$_auth_Password;
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        if ($params) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        }
+        curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+
+        $header = array();
+        $header[] = 'Content-type: application/json';
 
         // This should be the default Content-type for POST requests
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: " . self::$_content_type));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
         $result = curl_exec($ch);
         if (curl_errno($ch) !== 0) {
             error_log('cURL error when connecting to ' . $url . ': ' . curl_error($ch));
         }
 
+        $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);   //get status code
         curl_close($ch);
         print_r($result);
-    }
-
-    public static function getMsg($key = null, $lang = 'ja') {
-        $res = array(
-            'en' => array(
-                'failed_authentication' => 'Failed Authentication',
-                'invalid_key' => 'Invalid Key',
-                'no_source_phone_number' => 'No source phone Number',
-                'invalid_request_parameter' => 'Invalid Request Parameter',
-                'call_is_already_finished' => 'Call is Already Finished',
-                'call_not_found' => 'Call not Found',
-                'call_is_in_progress' => 'Call is In-Progress',
-            ),
-            'ja' => array(
-                'failed_authentication' => 'ログインIDまたはパスワードが違います。',
-                'invalid_key' => '有効な認証情報キーではありません。',
-                'no_source_phone_number' => '発信元番号が誤っています。',
-                'invalid_request_parameter' => '値がただしくありません。',
-                'call_is_already_finished' => '対象の音声通知はすでに終了しています。',
-                'call_not_found' => '指定の音声通知は存在しません。',
-                'call_is_in_progress' => '対象の音声通知は通話中のためキャンセルできません。',
-            )
-            
-        );
-        if ($key) {
-            return $res[$lang][$key];
-        } else {
-            return $res;
-        }
     }
 
 }
